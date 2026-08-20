@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+ 
+# Build output
+dist/
+build/
+*.tsbuildinfo
+ 
+# Env files (never commit secrets/DB URLs)
+.env
+.env.*
+!.env.example
+ 
+# Logs
+*.log
+logs/
+npm-debug.log*
+pnpm-debug.log*
+ 
+# Testing
+coverage/
+ 
+# Prisma
+# Do NOT ignore prisma/migrations — those must be committed.
+# Prisma's local dev DB (if using SQLite for anything ad hoc)
+*.db
+*.db-journal
+ 
+# OS / editor junk
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+ 
+# Tool-specific local state (agent/editor configs are often personal/local)
+.agents/
+.claude/
+.windsurf/
