@@ -1,49 +1,26 @@
 services:
-#  app:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile.dev
-#    ports:
-#      - "8080:8080"
-#    depends_on:
-#      db:
-#        condition: service_healthy
-#      redis:
-#        condition: service_healthy
-#    volumes:
-#      - .:/app
-#      - m2_cache:/root/.m2
-#    working_dir: /app
-#    env_file:
-#      - .env
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
-#      SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
-#      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
-#      SPRING_APPLICATION_NAME: ${SPRING_APPLICATION_NAME}
-#      SPRING_REDIS_HOST: redis
-#      SPRING_REDIS_PORT: 6379
-
   db:
-    image: postgres:15
+    image: postgres:15-alpine
+    restart: unless-stopped
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-finance_tracker}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
       retries: 20
 
   redis:
     image: redis:7.2-alpine
+    restart: unless-stopped
     ports:
-      - "6379:6379"     # remove if you don't need access from Windows host
+      - "6379:6379"
     volumes:
       - redis_data:/data
     command: ["redis-server", "--appendonly", "yes"]
@@ -53,7 +30,31 @@ services:
       timeout: 1s
       retries: 10
 
+  # api:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     NODE_ENV: development
+  #     PORT: 3000
+  #     DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-finance_tracker}?schema=public
+  #     REDIS_URL: redis://redis:6379
+  #   volumes:
+  #     - .:/app
+  #     - /app/node_modules
+  #     - pnpm_store:/root/.local/share/pnpm/store
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   # Runs Prisma migrations before starting the dev server
+  #   command: sh -c "pnpm exec prisma migrate dev && pnpm dev"
+
 volumes:
   postgres_data:
   redis_data:
-  m2_cache:
+  pnpm_store:
