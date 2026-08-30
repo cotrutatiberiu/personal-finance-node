@@ -1,3 +1,6 @@
+pnpm prisma db seed
+
+
 pnpm prisma migrate dev
 What it does: Compares your prisma/schema.prisma against your local database. It creates a new .sql file in prisma/migrations/, applies it to your database, updates your TypeScript client types, and runs prisma db seed (if configured).
 When to use: Local development whenever you change schema.prisma.

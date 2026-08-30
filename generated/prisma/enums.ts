@@ -9,7 +9,11 @@
 * 🟢 You can import this file directly.
 */
 
+export const account_type_enum = {
+  CASH: 'CASH',
+  CARD: 'CARD',
+  BANK: 'BANK',
+  SAVINGS: 'SAVINGS'
+} as const
 
-
-// This file is empty because there are no enums in the schema.
-export {}
+export type account_type_enum = (typeof account_type_enum)[keyof typeof account_type_enum]

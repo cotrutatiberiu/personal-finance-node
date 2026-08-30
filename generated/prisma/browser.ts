@@ -18,21 +18,11 @@ export { Prisma }
 export * as $Enums from './enums.js'
 export * from './enums.js';
 /**
- * Model account_types
- * 
- */
-export type account_types = Prisma.account_typesModel
-/**
  * Model accounts
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
  */
 export type accounts = Prisma.accountsModel
-/**
- * Model budgets
- * 
- */
-export type budgets = Prisma.budgetsModel
 /**
  * Model categories
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
@@ -54,11 +44,6 @@ export type roles = Prisma.rolesModel
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  */
 export type transactions = Prisma.transactionsModel
-/**
- * Model user_roles
- * 
- */
-export type user_roles = Prisma.user_rolesModel
 /**
  * Model users
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.

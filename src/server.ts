@@ -1,6 +1,7 @@
+import "dotenv/config";
 import app from './app.js';
 
-const port = "8080";
+const port = process.env.PORT;
 
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);

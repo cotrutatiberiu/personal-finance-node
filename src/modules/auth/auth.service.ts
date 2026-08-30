@@ -1,24 +1,50 @@
 import bcrypt from "bcrypt";
-import type { RegisterInput } from "./auth.schema.js";
+import type { RegisterRequest, LoginRequest } from "./auth.schema.js";
 import { prisma } from "../../db/client.js";
-import { EmailAlreadyUsedError } from "../../common/errors.js";
+import {
+  EmailAlreadyUsedError,
+  InvalidCredentialsError,
+} from "../../common/errors.js";
 
-const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET!;
-const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
+export async function register(payload: RegisterRequest) {
+  const existingUser = await prisma.users.findFirst({
+    where: { email: payload.email },
+  });
+  if (existingUser) throw new EmailAlreadyUsedError(payload.email);
 
-export async function register(input: RegisterInput) {
-  // const existingUser = await prisma.users.findFirst({
-  //   where: { email: input.email },
-  // });
-  // if (existingUser) throw new EmailAlreadyUsedError(input.email);
+  const hashedPassword = await bcrypt.hash(payload.password, 12);
+  const user = await prisma.users.create({
+    data: {
+      first_name: payload.firstName,
+      last_name: payload.lastName,
+      email: payload.email,
+      password: hashedPassword,
+      role_id: payload.roleId,
+    },
+    select: {
+      id: true,
+      email: true,
+      first_name: true,
+      last_name: true,
+      created_at: true,
+    },
+  });
 
-  // const hashedPassword = await bcrypt.hash(input.password, 12);
-  // const user = await prisma.users.create({
-  //   data: {
-  //     first_name: input.firstName,
-  //     last_name: input.lastName,
-  //     email: input.email,
-  //     password: hashedPassword,
-  //   },
-  // });
+  return user;
+}
+
+export async function login(payload: LoginRequest) {
+  const user = await prisma.users.findFirst({
+    where: { email: payload.email },
+    include: {
+      roles: true
+    },
+  });
+
+  if (!user) throw new InvalidCredentialsError();
+
+  const isPasswordValid = await bcrypt.compare(payload.password, user.password);
+  if (!isPasswordValid) throw new InvalidCredentialsError();
+
+  return toLoginReponse(user);
 }

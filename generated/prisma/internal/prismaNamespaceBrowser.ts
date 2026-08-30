@@ -51,14 +51,11 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
-  account_types: 'account_types',
   accounts: 'accounts',
-  budgets: 'budgets',
   categories: 'categories',
   currencies: 'currencies',
   roles: 'roles',
   transactions: 'transactions',
-  user_roles: 'user_roles',
   users: 'users'
 } as const
 
@@ -78,18 +75,10 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-export const Account_typesScalarFieldEnum = {
-  id: 'id',
-  name: 'name'
-} as const
-
-export type Account_typesScalarFieldEnum = (typeof Account_typesScalarFieldEnum)[keyof typeof Account_typesScalarFieldEnum]
-
-
 export const AccountsScalarFieldEnum = {
   id: 'id',
   user_id: 'user_id',
-  account_type_id: 'account_type_id',
+  account_type: 'account_type',
   currency_id: 'currency_id',
   name: 'name',
   archived: 'archived',
@@ -99,19 +88,6 @@ export const AccountsScalarFieldEnum = {
 } as const
 
 export type AccountsScalarFieldEnum = (typeof AccountsScalarFieldEnum)[keyof typeof AccountsScalarFieldEnum]
-
-
-export const BudgetsScalarFieldEnum = {
-  id: 'id',
-  user_id: 'user_id',
-  category_id: 'category_id',
-  name: 'name',
-  month: 'month',
-  planned_amount: 'planned_amount',
-  created_at: 'created_at'
-} as const
-
-export type BudgetsScalarFieldEnum = (typeof BudgetsScalarFieldEnum)[keyof typeof BudgetsScalarFieldEnum]
 
 
 export const CategoriesScalarFieldEnum = {
@@ -157,22 +133,13 @@ export const TransactionsScalarFieldEnum = {
 export type TransactionsScalarFieldEnum = (typeof TransactionsScalarFieldEnum)[keyof typeof TransactionsScalarFieldEnum]
 
 
-export const User_rolesScalarFieldEnum = {
-  user_id: 'user_id',
-  role_id: 'role_id',
-  created_at: 'created_at',
-  updated_at: 'updated_at'
-} as const
-
-export type User_rolesScalarFieldEnum = (typeof User_rolesScalarFieldEnum)[keyof typeof User_rolesScalarFieldEnum]
-
-
 export const UsersScalarFieldEnum = {
   id: 'id',
   first_name: 'first_name',
   last_name: 'last_name',
   email: 'email',
   password: 'password',
+  role_id: 'role_id',
   created_at: 'created_at',
   updated_at: 'updated_at'
 } as const

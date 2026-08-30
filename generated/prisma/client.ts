@@ -31,8 +31,8 @@ export * from "./enums.js"
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Account_types
- * const account_types = await prisma.account_types.findMany()
+ * // Fetch zero or more Accounts
+ * const accounts = await prisma.accounts.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -42,21 +42,11 @@ export type PrismaClient<LogOpts extends Prisma.LogLevel = never, OmitOpts exten
 export { Prisma }
 
 /**
- * Model account_types
- * 
- */
-export type account_types = Prisma.account_typesModel
-/**
  * Model accounts
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
  */
 export type accounts = Prisma.accountsModel
-/**
- * Model budgets
- * 
- */
-export type budgets = Prisma.budgetsModel
 /**
  * Model categories
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
@@ -78,11 +68,6 @@ export type roles = Prisma.rolesModel
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  */
 export type transactions = Prisma.transactionsModel
-/**
- * Model user_roles
- * 
- */
-export type user_roles = Prisma.user_rolesModel
 /**
  * Model users
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.

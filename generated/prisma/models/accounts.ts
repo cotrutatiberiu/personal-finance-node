@@ -30,24 +30,22 @@ export type AggregateAccounts = {
 export type AccountsAvgAggregateOutputType = {
   id: number | null
   user_id: number | null
-  account_type_id: number | null
   currency_id: number | null
   balance: runtime.Decimal | null
 }
 
 export type AccountsSumAggregateOutputType = {
-  id: bigint | null
-  user_id: bigint | null
-  account_type_id: bigint | null
-  currency_id: bigint | null
+  id: number | null
+  user_id: number | null
+  currency_id: number | null
   balance: runtime.Decimal | null
 }
 
 export type AccountsMinAggregateOutputType = {
-  id: bigint | null
-  user_id: bigint | null
-  account_type_id: bigint | null
-  currency_id: bigint | null
+  id: number | null
+  user_id: number | null
+  account_type: $Enums.account_type_enum | null
+  currency_id: number | null
   name: string | null
   archived: boolean | null
   balance: runtime.Decimal | null
@@ -56,10 +54,10 @@ export type AccountsMinAggregateOutputType = {
 }
 
 export type AccountsMaxAggregateOutputType = {
-  id: bigint | null
-  user_id: bigint | null
-  account_type_id: bigint | null
-  currency_id: bigint | null
+  id: number | null
+  user_id: number | null
+  account_type: $Enums.account_type_enum | null
+  currency_id: number | null
   name: string | null
   archived: boolean | null
   balance: runtime.Decimal | null
@@ -70,7 +68,7 @@ export type AccountsMaxAggregateOutputType = {
 export type AccountsCountAggregateOutputType = {
   id: number
   user_id: number
-  account_type_id: number
+  account_type: number
   currency_id: number
   name: number
   archived: number
@@ -84,7 +82,6 @@ export type AccountsCountAggregateOutputType = {
 export type AccountsAvgAggregateInputType = {
   id?: true
   user_id?: true
-  account_type_id?: true
   currency_id?: true
   balance?: true
 }
@@ -92,7 +89,6 @@ export type AccountsAvgAggregateInputType = {
 export type AccountsSumAggregateInputType = {
   id?: true
   user_id?: true
-  account_type_id?: true
   currency_id?: true
   balance?: true
 }
@@ -100,7 +96,7 @@ export type AccountsSumAggregateInputType = {
 export type AccountsMinAggregateInputType = {
   id?: true
   user_id?: true
-  account_type_id?: true
+  account_type?: true
   currency_id?: true
   name?: true
   archived?: true
@@ -112,7 +108,7 @@ export type AccountsMinAggregateInputType = {
 export type AccountsMaxAggregateInputType = {
   id?: true
   user_id?: true
-  account_type_id?: true
+  account_type?: true
   currency_id?: true
   name?: true
   archived?: true
@@ -124,7 +120,7 @@ export type AccountsMaxAggregateInputType = {
 export type AccountsCountAggregateInputType = {
   id?: true
   user_id?: true
-  account_type_id?: true
+  account_type?: true
   currency_id?: true
   name?: true
   archived?: true
@@ -221,10 +217,10 @@ export type accountsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 }
 
 export type AccountsGroupByOutputType = {
-  id: bigint
-  user_id: bigint
-  account_type_id: bigint
-  currency_id: bigint
+  id: number
+  user_id: number
+  account_type: $Enums.account_type_enum
+  currency_id: number
   name: string
   archived: boolean
   balance: runtime.Decimal
@@ -256,16 +252,15 @@ export type accountsWhereInput = {
   AND?: Prisma.accountsWhereInput | Prisma.accountsWhereInput[]
   OR?: Prisma.accountsWhereInput[]
   NOT?: Prisma.accountsWhereInput | Prisma.accountsWhereInput[]
-  id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  user_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  account_type_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  currency_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
+  id?: Prisma.IntFilter<"accounts"> | number
+  user_id?: Prisma.IntFilter<"accounts"> | number
+  account_type?: Prisma.Enumaccount_type_enumFilter<"accounts"> | $Enums.account_type_enum
+  currency_id?: Prisma.IntFilter<"accounts"> | number
   name?: Prisma.StringFilter<"accounts"> | string
   archived?: Prisma.BoolFilter<"accounts"> | boolean
   balance?: Prisma.DecimalFilter<"accounts"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
-  account_types?: Prisma.XOR<Prisma.Account_typesScalarRelationFilter, Prisma.account_typesWhereInput>
   currencies?: Prisma.XOR<Prisma.CurrenciesScalarRelationFilter, Prisma.currenciesWhereInput>
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   transactions?: Prisma.TransactionsListRelationFilter
@@ -274,33 +269,31 @@ export type accountsWhereInput = {
 export type accountsOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
+  account_type?: Prisma.SortOrder
   currency_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   archived?: Prisma.SortOrder
   balance?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   updated_at?: Prisma.SortOrder
-  account_types?: Prisma.account_typesOrderByWithRelationInput
   currencies?: Prisma.currenciesOrderByWithRelationInput
   users?: Prisma.usersOrderByWithRelationInput
   transactions?: Prisma.transactionsOrderByRelationAggregateInput
 }
 
 export type accountsWhereUniqueInput = Prisma.AtLeast<{
-  id?: bigint | number
+  id?: number
   AND?: Prisma.accountsWhereInput | Prisma.accountsWhereInput[]
   OR?: Prisma.accountsWhereInput[]
   NOT?: Prisma.accountsWhereInput | Prisma.accountsWhereInput[]
-  user_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  account_type_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  currency_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
+  user_id?: Prisma.IntFilter<"accounts"> | number
+  account_type?: Prisma.Enumaccount_type_enumFilter<"accounts"> | $Enums.account_type_enum
+  currency_id?: Prisma.IntFilter<"accounts"> | number
   name?: Prisma.StringFilter<"accounts"> | string
   archived?: Prisma.BoolFilter<"accounts"> | boolean
   balance?: Prisma.DecimalFilter<"accounts"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
   updated_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
-  account_types?: Prisma.XOR<Prisma.Account_typesScalarRelationFilter, Prisma.account_typesWhereInput>
   currencies?: Prisma.XOR<Prisma.CurrenciesScalarRelationFilter, Prisma.currenciesWhereInput>
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
   transactions?: Prisma.TransactionsListRelationFilter
@@ -309,7 +302,7 @@ export type accountsWhereUniqueInput = Prisma.AtLeast<{
 export type accountsOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
+  account_type?: Prisma.SortOrder
   currency_id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   archived?: Prisma.SortOrder
@@ -327,10 +320,10 @@ export type accountsScalarWhereWithAggregatesInput = {
   AND?: Prisma.accountsScalarWhereWithAggregatesInput | Prisma.accountsScalarWhereWithAggregatesInput[]
   OR?: Prisma.accountsScalarWhereWithAggregatesInput[]
   NOT?: Prisma.accountsScalarWhereWithAggregatesInput | Prisma.accountsScalarWhereWithAggregatesInput[]
-  id?: Prisma.BigIntWithAggregatesFilter<"accounts"> | bigint | number
-  user_id?: Prisma.BigIntWithAggregatesFilter<"accounts"> | bigint | number
-  account_type_id?: Prisma.BigIntWithAggregatesFilter<"accounts"> | bigint | number
-  currency_id?: Prisma.BigIntWithAggregatesFilter<"accounts"> | bigint | number
+  id?: Prisma.IntWithAggregatesFilter<"accounts"> | number
+  user_id?: Prisma.IntWithAggregatesFilter<"accounts"> | number
+  account_type?: Prisma.Enumaccount_type_enumWithAggregatesFilter<"accounts"> | $Enums.account_type_enum
+  currency_id?: Prisma.IntWithAggregatesFilter<"accounts"> | number
   name?: Prisma.StringWithAggregatesFilter<"accounts"> | string
   archived?: Prisma.BoolWithAggregatesFilter<"accounts"> | boolean
   balance?: Prisma.DecimalWithAggregatesFilter<"accounts"> | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -339,23 +332,22 @@ export type accountsScalarWhereWithAggregatesInput = {
 }
 
 export type accountsCreateInput = {
-  id?: bigint | number
+  account_type: $Enums.account_type_enum
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   updated_at?: Date | string
-  account_types: Prisma.account_typesCreateNestedOneWithoutAccountsInput
   currencies: Prisma.currenciesCreateNestedOneWithoutAccountsInput
   users: Prisma.usersCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutAccountsInput
 }
 
 export type accountsUncheckedCreateInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  account_type_id: bigint | number
-  currency_id: bigint | number
+  id?: number
+  user_id: number
+  account_type: $Enums.account_type_enum
+  currency_id: number
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -365,23 +357,22 @@ export type accountsUncheckedCreateInput = {
 }
 
 export type accountsUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account_types?: Prisma.account_typesUpdateOneRequiredWithoutAccountsNestedInput
   currencies?: Prisma.currenciesUpdateOneRequiredWithoutAccountsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutAccountsNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutAccountsNestedInput
 }
 
 export type accountsUncheckedUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
+  currency_id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -391,10 +382,10 @@ export type accountsUncheckedUpdateInput = {
 }
 
 export type accountsCreateManyInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  account_type_id: bigint | number
-  currency_id: bigint | number
+  id?: number
+  user_id: number
+  account_type: $Enums.account_type_enum
+  currency_id: number
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -403,7 +394,7 @@ export type accountsCreateManyInput = {
 }
 
 export type accountsUpdateManyMutationInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -412,15 +403,65 @@ export type accountsUpdateManyMutationInput = {
 }
 
 export type accountsUncheckedUpdateManyInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
+  currency_id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type accountsCountOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
+  account_type?: Prisma.SortOrder
+  currency_id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  archived?: Prisma.SortOrder
+  balance?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+}
+
+export type accountsAvgOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
+  currency_id?: Prisma.SortOrder
+  balance?: Prisma.SortOrder
+}
+
+export type accountsMaxOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
+  account_type?: Prisma.SortOrder
+  currency_id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  archived?: Prisma.SortOrder
+  balance?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+}
+
+export type accountsMinOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
+  account_type?: Prisma.SortOrder
+  currency_id?: Prisma.SortOrder
+  name?: Prisma.SortOrder
+  archived?: Prisma.SortOrder
+  balance?: Prisma.SortOrder
+  created_at?: Prisma.SortOrder
+  updated_at?: Prisma.SortOrder
+}
+
+export type accountsSumOrderByAggregateInput = {
+  id?: Prisma.SortOrder
+  user_id?: Prisma.SortOrder
+  currency_id?: Prisma.SortOrder
+  balance?: Prisma.SortOrder
 }
 
 export type AccountsListRelationFilter = {
@@ -433,103 +474,17 @@ export type accountsOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type accountsCountOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
-  currency_id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  archived?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-}
-
-export type accountsAvgOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
-  currency_id?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
-}
-
-export type accountsMaxOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
-  currency_id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  archived?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-}
-
-export type accountsMinOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
-  currency_id?: Prisma.SortOrder
-  name?: Prisma.SortOrder
-  archived?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
-  created_at?: Prisma.SortOrder
-  updated_at?: Prisma.SortOrder
-}
-
-export type accountsSumOrderByAggregateInput = {
-  id?: Prisma.SortOrder
-  user_id?: Prisma.SortOrder
-  account_type_id?: Prisma.SortOrder
-  currency_id?: Prisma.SortOrder
-  balance?: Prisma.SortOrder
-}
-
 export type AccountsScalarRelationFilter = {
   is?: Prisma.accountsWhereInput
   isNot?: Prisma.accountsWhereInput
 }
 
-export type accountsCreateNestedManyWithoutAccount_typesInput = {
-  create?: Prisma.XOR<Prisma.accountsCreateWithoutAccount_typesInput, Prisma.accountsUncheckedCreateWithoutAccount_typesInput> | Prisma.accountsCreateWithoutAccount_typesInput[] | Prisma.accountsUncheckedCreateWithoutAccount_typesInput[]
-  connectOrCreate?: Prisma.accountsCreateOrConnectWithoutAccount_typesInput | Prisma.accountsCreateOrConnectWithoutAccount_typesInput[]
-  createMany?: Prisma.accountsCreateManyAccount_typesInputEnvelope
-  connect?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
+export type Enumaccount_type_enumFieldUpdateOperationsInput = {
+  set?: $Enums.account_type_enum
 }
 
-export type accountsUncheckedCreateNestedManyWithoutAccount_typesInput = {
-  create?: Prisma.XOR<Prisma.accountsCreateWithoutAccount_typesInput, Prisma.accountsUncheckedCreateWithoutAccount_typesInput> | Prisma.accountsCreateWithoutAccount_typesInput[] | Prisma.accountsUncheckedCreateWithoutAccount_typesInput[]
-  connectOrCreate?: Prisma.accountsCreateOrConnectWithoutAccount_typesInput | Prisma.accountsCreateOrConnectWithoutAccount_typesInput[]
-  createMany?: Prisma.accountsCreateManyAccount_typesInputEnvelope
-  connect?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-}
-
-export type accountsUpdateManyWithoutAccount_typesNestedInput = {
-  create?: Prisma.XOR<Prisma.accountsCreateWithoutAccount_typesInput, Prisma.accountsUncheckedCreateWithoutAccount_typesInput> | Prisma.accountsCreateWithoutAccount_typesInput[] | Prisma.accountsUncheckedCreateWithoutAccount_typesInput[]
-  connectOrCreate?: Prisma.accountsCreateOrConnectWithoutAccount_typesInput | Prisma.accountsCreateOrConnectWithoutAccount_typesInput[]
-  upsert?: Prisma.accountsUpsertWithWhereUniqueWithoutAccount_typesInput | Prisma.accountsUpsertWithWhereUniqueWithoutAccount_typesInput[]
-  createMany?: Prisma.accountsCreateManyAccount_typesInputEnvelope
-  set?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  disconnect?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  delete?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  connect?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  update?: Prisma.accountsUpdateWithWhereUniqueWithoutAccount_typesInput | Prisma.accountsUpdateWithWhereUniqueWithoutAccount_typesInput[]
-  updateMany?: Prisma.accountsUpdateManyWithWhereWithoutAccount_typesInput | Prisma.accountsUpdateManyWithWhereWithoutAccount_typesInput[]
-  deleteMany?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
-}
-
-export type accountsUncheckedUpdateManyWithoutAccount_typesNestedInput = {
-  create?: Prisma.XOR<Prisma.accountsCreateWithoutAccount_typesInput, Prisma.accountsUncheckedCreateWithoutAccount_typesInput> | Prisma.accountsCreateWithoutAccount_typesInput[] | Prisma.accountsUncheckedCreateWithoutAccount_typesInput[]
-  connectOrCreate?: Prisma.accountsCreateOrConnectWithoutAccount_typesInput | Prisma.accountsCreateOrConnectWithoutAccount_typesInput[]
-  upsert?: Prisma.accountsUpsertWithWhereUniqueWithoutAccount_typesInput | Prisma.accountsUpsertWithWhereUniqueWithoutAccount_typesInput[]
-  createMany?: Prisma.accountsCreateManyAccount_typesInputEnvelope
-  set?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  disconnect?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  delete?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  connect?: Prisma.accountsWhereUniqueInput | Prisma.accountsWhereUniqueInput[]
-  update?: Prisma.accountsUpdateWithWhereUniqueWithoutAccount_typesInput | Prisma.accountsUpdateWithWhereUniqueWithoutAccount_typesInput[]
-  updateMany?: Prisma.accountsUpdateManyWithWhereWithoutAccount_typesInput | Prisma.accountsUpdateManyWithWhereWithoutAccount_typesInput[]
-  deleteMany?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
+export type StringFieldUpdateOperationsInput = {
+  set?: string
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -546,6 +501,14 @@ export type DecimalFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type accountsCreateNestedManyWithoutCurrenciesInput = {
@@ -646,87 +609,21 @@ export type accountsUncheckedUpdateManyWithoutUsersNestedInput = {
   deleteMany?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
 }
 
-export type accountsCreateWithoutAccount_typesInput = {
-  id?: bigint | number
-  name: string
-  archived?: boolean
-  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Date | string
-  updated_at?: Date | string
-  currencies: Prisma.currenciesCreateNestedOneWithoutAccountsInput
-  users: Prisma.usersCreateNestedOneWithoutAccountsInput
-  transactions?: Prisma.transactionsCreateNestedManyWithoutAccountsInput
-}
-
-export type accountsUncheckedCreateWithoutAccount_typesInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  currency_id: bigint | number
-  name: string
-  archived?: boolean
-  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Date | string
-  updated_at?: Date | string
-  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutAccountsInput
-}
-
-export type accountsCreateOrConnectWithoutAccount_typesInput = {
-  where: Prisma.accountsWhereUniqueInput
-  create: Prisma.XOR<Prisma.accountsCreateWithoutAccount_typesInput, Prisma.accountsUncheckedCreateWithoutAccount_typesInput>
-}
-
-export type accountsCreateManyAccount_typesInputEnvelope = {
-  data: Prisma.accountsCreateManyAccount_typesInput | Prisma.accountsCreateManyAccount_typesInput[]
-  skipDuplicates?: boolean
-}
-
-export type accountsUpsertWithWhereUniqueWithoutAccount_typesInput = {
-  where: Prisma.accountsWhereUniqueInput
-  update: Prisma.XOR<Prisma.accountsUpdateWithoutAccount_typesInput, Prisma.accountsUncheckedUpdateWithoutAccount_typesInput>
-  create: Prisma.XOR<Prisma.accountsCreateWithoutAccount_typesInput, Prisma.accountsUncheckedCreateWithoutAccount_typesInput>
-}
-
-export type accountsUpdateWithWhereUniqueWithoutAccount_typesInput = {
-  where: Prisma.accountsWhereUniqueInput
-  data: Prisma.XOR<Prisma.accountsUpdateWithoutAccount_typesInput, Prisma.accountsUncheckedUpdateWithoutAccount_typesInput>
-}
-
-export type accountsUpdateManyWithWhereWithoutAccount_typesInput = {
-  where: Prisma.accountsScalarWhereInput
-  data: Prisma.XOR<Prisma.accountsUpdateManyMutationInput, Prisma.accountsUncheckedUpdateManyWithoutAccount_typesInput>
-}
-
-export type accountsScalarWhereInput = {
-  AND?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
-  OR?: Prisma.accountsScalarWhereInput[]
-  NOT?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
-  id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  user_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  account_type_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  currency_id?: Prisma.BigIntFilter<"accounts"> | bigint | number
-  name?: Prisma.StringFilter<"accounts"> | string
-  archived?: Prisma.BoolFilter<"accounts"> | boolean
-  balance?: Prisma.DecimalFilter<"accounts"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
-  updated_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
-}
-
 export type accountsCreateWithoutCurrenciesInput = {
-  id?: bigint | number
+  account_type: $Enums.account_type_enum
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   updated_at?: Date | string
-  account_types: Prisma.account_typesCreateNestedOneWithoutAccountsInput
   users: Prisma.usersCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutAccountsInput
 }
 
 export type accountsUncheckedCreateWithoutCurrenciesInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  account_type_id: bigint | number
+  id?: number
+  user_id: number
+  account_type: $Enums.account_type_enum
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -761,23 +658,37 @@ export type accountsUpdateManyWithWhereWithoutCurrenciesInput = {
   data: Prisma.XOR<Prisma.accountsUpdateManyMutationInput, Prisma.accountsUncheckedUpdateManyWithoutCurrenciesInput>
 }
 
+export type accountsScalarWhereInput = {
+  AND?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
+  OR?: Prisma.accountsScalarWhereInput[]
+  NOT?: Prisma.accountsScalarWhereInput | Prisma.accountsScalarWhereInput[]
+  id?: Prisma.IntFilter<"accounts"> | number
+  user_id?: Prisma.IntFilter<"accounts"> | number
+  account_type?: Prisma.Enumaccount_type_enumFilter<"accounts"> | $Enums.account_type_enum
+  currency_id?: Prisma.IntFilter<"accounts"> | number
+  name?: Prisma.StringFilter<"accounts"> | string
+  archived?: Prisma.BoolFilter<"accounts"> | boolean
+  balance?: Prisma.DecimalFilter<"accounts"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  created_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
+  updated_at?: Prisma.DateTimeFilter<"accounts"> | Date | string
+}
+
 export type accountsCreateWithoutTransactionsInput = {
-  id?: bigint | number
+  account_type: $Enums.account_type_enum
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   updated_at?: Date | string
-  account_types: Prisma.account_typesCreateNestedOneWithoutAccountsInput
   currencies: Prisma.currenciesCreateNestedOneWithoutAccountsInput
   users: Prisma.usersCreateNestedOneWithoutAccountsInput
 }
 
 export type accountsUncheckedCreateWithoutTransactionsInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  account_type_id: bigint | number
-  currency_id: bigint | number
+  id?: number
+  user_id: number
+  account_type: $Enums.account_type_enum
+  currency_id: number
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -802,22 +713,21 @@ export type accountsUpdateToOneWithWhereWithoutTransactionsInput = {
 }
 
 export type accountsUpdateWithoutTransactionsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account_types?: Prisma.account_typesUpdateOneRequiredWithoutAccountsNestedInput
   currencies?: Prisma.currenciesUpdateOneRequiredWithoutAccountsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutAccountsNestedInput
 }
 
 export type accountsUncheckedUpdateWithoutTransactionsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
+  currency_id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -826,21 +736,20 @@ export type accountsUncheckedUpdateWithoutTransactionsInput = {
 }
 
 export type accountsCreateWithoutUsersInput = {
-  id?: bigint | number
+  account_type: $Enums.account_type_enum
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Date | string
   updated_at?: Date | string
-  account_types: Prisma.account_typesCreateNestedOneWithoutAccountsInput
   currencies: Prisma.currenciesCreateNestedOneWithoutAccountsInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutAccountsInput
 }
 
 export type accountsUncheckedCreateWithoutUsersInput = {
-  id?: bigint | number
-  account_type_id: bigint | number
-  currency_id: bigint | number
+  id?: number
+  account_type: $Enums.account_type_enum
+  currency_id: number
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -875,56 +784,10 @@ export type accountsUpdateManyWithWhereWithoutUsersInput = {
   data: Prisma.XOR<Prisma.accountsUpdateManyMutationInput, Prisma.accountsUncheckedUpdateManyWithoutUsersInput>
 }
 
-export type accountsCreateManyAccount_typesInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  currency_id: bigint | number
-  name: string
-  archived?: boolean
-  balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Date | string
-  updated_at?: Date | string
-}
-
-export type accountsUpdateWithoutAccount_typesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  currencies?: Prisma.currenciesUpdateOneRequiredWithoutAccountsNestedInput
-  users?: Prisma.usersUpdateOneRequiredWithoutAccountsNestedInput
-  transactions?: Prisma.transactionsUpdateManyWithoutAccountsNestedInput
-}
-
-export type accountsUncheckedUpdateWithoutAccount_typesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutAccountsNestedInput
-}
-
-export type accountsUncheckedUpdateManyWithoutAccount_typesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 export type accountsCreateManyCurrenciesInput = {
-  id?: bigint | number
-  user_id: bigint | number
-  account_type_id: bigint | number
+  id?: number
+  user_id: number
+  account_type: $Enums.account_type_enum
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -933,21 +796,20 @@ export type accountsCreateManyCurrenciesInput = {
 }
 
 export type accountsUpdateWithoutCurrenciesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account_types?: Prisma.account_typesUpdateOneRequiredWithoutAccountsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutAccountsNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutAccountsNestedInput
 }
 
 export type accountsUncheckedUpdateWithoutCurrenciesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -957,9 +819,9 @@ export type accountsUncheckedUpdateWithoutCurrenciesInput = {
 }
 
 export type accountsUncheckedUpdateManyWithoutCurrenciesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -968,9 +830,9 @@ export type accountsUncheckedUpdateManyWithoutCurrenciesInput = {
 }
 
 export type accountsCreateManyUsersInput = {
-  id?: bigint | number
-  account_type_id: bigint | number
-  currency_id: bigint | number
+  id?: number
+  account_type: $Enums.account_type_enum
+  currency_id: number
   name: string
   archived?: boolean
   balance?: runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -979,21 +841,20 @@ export type accountsCreateManyUsersInput = {
 }
 
 export type accountsUpdateWithoutUsersInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  account_types?: Prisma.account_typesUpdateOneRequiredWithoutAccountsNestedInput
   currencies?: Prisma.currenciesUpdateOneRequiredWithoutAccountsNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutAccountsNestedInput
 }
 
 export type accountsUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
+  currency_id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1003,9 +864,9 @@ export type accountsUncheckedUpdateWithoutUsersInput = {
 }
 
 export type accountsUncheckedUpdateManyWithoutUsersInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_type_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  currency_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_type?: Prisma.Enumaccount_type_enumFieldUpdateOperationsInput | $Enums.account_type_enum
+  currency_id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   archived?: Prisma.BoolFieldUpdateOperationsInput | boolean
   balance?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
@@ -1047,14 +908,13 @@ export type AccountsCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime
 export type accountsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   user_id?: boolean
-  account_type_id?: boolean
+  account_type?: boolean
   currency_id?: boolean
   name?: boolean
   archived?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
-  account_types?: boolean | Prisma.account_typesDefaultArgs<ExtArgs>
   currencies?: boolean | Prisma.currenciesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.accounts$transactionsArgs<ExtArgs>
@@ -1064,14 +924,13 @@ export type accountsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
 export type accountsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   user_id?: boolean
-  account_type_id?: boolean
+  account_type?: boolean
   currency_id?: boolean
   name?: boolean
   archived?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
-  account_types?: boolean | Prisma.account_typesDefaultArgs<ExtArgs>
   currencies?: boolean | Prisma.currenciesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["accounts"]>
@@ -1079,14 +938,13 @@ export type accountsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type accountsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   user_id?: boolean
-  account_type_id?: boolean
+  account_type?: boolean
   currency_id?: boolean
   name?: boolean
   archived?: boolean
   balance?: boolean
   created_at?: boolean
   updated_at?: boolean
-  account_types?: boolean | Prisma.account_typesDefaultArgs<ExtArgs>
   currencies?: boolean | Prisma.currenciesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["accounts"]>
@@ -1094,7 +952,7 @@ export type accountsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type accountsSelectScalar = {
   id?: boolean
   user_id?: boolean
-  account_type_id?: boolean
+  account_type?: boolean
   currency_id?: boolean
   name?: boolean
   archived?: boolean
@@ -1103,21 +961,18 @@ export type accountsSelectScalar = {
   updated_at?: boolean
 }
 
-export type accountsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "account_type_id" | "currency_id" | "name" | "archived" | "balance" | "created_at" | "updated_at", ExtArgs["result"]["accounts"]>
+export type accountsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "user_id" | "account_type" | "currency_id" | "name" | "archived" | "balance" | "created_at" | "updated_at", ExtArgs["result"]["accounts"]>
 export type accountsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  account_types?: boolean | Prisma.account_typesDefaultArgs<ExtArgs>
   currencies?: boolean | Prisma.currenciesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
   transactions?: boolean | Prisma.accounts$transactionsArgs<ExtArgs>
   _count?: boolean | Prisma.AccountsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type accountsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  account_types?: boolean | Prisma.account_typesDefaultArgs<ExtArgs>
   currencies?: boolean | Prisma.currenciesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
 export type accountsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  account_types?: boolean | Prisma.account_typesDefaultArgs<ExtArgs>
   currencies?: boolean | Prisma.currenciesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
 }
@@ -1125,16 +980,15 @@ export type accountsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $accountsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "accounts"
   objects: {
-    account_types: Prisma.$account_typesPayload<ExtArgs>
     currencies: Prisma.$currenciesPayload<ExtArgs>
     users: Prisma.$usersPayload<ExtArgs>
     transactions: Prisma.$transactionsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: bigint
-    user_id: bigint
-    account_type_id: bigint
-    currency_id: bigint
+    id: number
+    user_id: number
+    account_type: $Enums.account_type_enum
+    currency_id: number
     name: string
     archived: boolean
     balance: runtime.Decimal
@@ -1534,7 +1388,6 @@ readonly fields: accountsFieldRefs;
  */
 export interface Prisma__accountsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  account_types<T extends Prisma.account_typesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.account_typesDefaultArgs<ExtArgs>>): Prisma.Prisma__account_typesClient<runtime.Types.Result.GetResult<Prisma.$account_typesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   currencies<T extends Prisma.currenciesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.currenciesDefaultArgs<ExtArgs>>): Prisma.Prisma__currenciesClient<runtime.Types.Result.GetResult<Prisma.$currenciesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   transactions<T extends Prisma.accounts$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.accounts$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transactionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -1567,10 +1420,10 @@ export interface Prisma__accountsClient<T, Null = never, ExtArgs extends runtime
  * Fields of the accounts model
  */
 export interface accountsFieldRefs {
-  readonly id: Prisma.FieldRef<"accounts", 'BigInt'>
-  readonly user_id: Prisma.FieldRef<"accounts", 'BigInt'>
-  readonly account_type_id: Prisma.FieldRef<"accounts", 'BigInt'>
-  readonly currency_id: Prisma.FieldRef<"accounts", 'BigInt'>
+  readonly id: Prisma.FieldRef<"accounts", 'Int'>
+  readonly user_id: Prisma.FieldRef<"accounts", 'Int'>
+  readonly account_type: Prisma.FieldRef<"accounts", 'account_type_enum'>
+  readonly currency_id: Prisma.FieldRef<"accounts", 'Int'>
   readonly name: Prisma.FieldRef<"accounts", 'String'>
   readonly archived: Prisma.FieldRef<"accounts", 'Boolean'>
   readonly balance: Prisma.FieldRef<"accounts", 'Decimal'>

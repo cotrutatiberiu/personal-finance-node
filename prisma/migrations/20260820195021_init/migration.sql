@@ -1,42 +1,28 @@
+CREATE TYPE account_type_enum AS ENUM ('CASH', 'CARD', 'BANK', 'SAVINGS');
+
 CREATE TABLE IF NOT EXISTS roles
 (
-    id   BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id   INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS users
 (
-    id         BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id         INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     first_name VARCHAR(50)                                        NOT NULL,
     last_name  VARCHAR(50)                                        NOT NULL,
     email      VARCHAR(255)                                       NOT NULL,
     password   VARCHAR(255)                                       NOT NULL,
+    role_id    INT                                                NOT NULL REFERENCES roles (id) ON DELETE RESTRICT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS uq_users_email ON users (lower(email));
 
-CREATE TABLE IF NOT EXISTS user_roles
-(
-    user_id    BIGINT                                             NOT NULL,
-    role_id    BIGINT                                             NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    PRIMARY KEY (user_id, role_id),
-    CONSTRAINT fk_user_roles_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    CONSTRAINT fk_user_roles_role FOREIGN KEY (role_id) REFERENCES roles (id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS account_types
-(
-    id   BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    name VARCHAR(255) NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS currencies
 (
-    id   BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id   INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR(3) NOT NULL UNIQUE,
     CONSTRAINT chk_currency_name_format CHECK (name ~ '^[A-Z]+$'
         )
@@ -46,10 +32,10 @@ CREATE UNIQUE INDEX IF NOT EXISTS uq_currency_name ON currencies (lower(name));
 
 CREATE TABLE IF NOT EXISTS accounts
 (
-    id              BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id         BIGINT                       NOT NULL references users (id) ON DELETE CASCADE,
-    account_type_id BIGINT                       NOT NULL references account_types (id) ON DELETE SET NULL,
-    currency_id     BIGINT                       NOT NULL references currencies (id) ON DELETE SET NULL,
+    id              INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    user_id         INT                       NOT NULL references users (id) ON DELETE CASCADE,
+    account_type    account_type_enum         NOT NULL,
+    currency_id     INT                       NOT NULL references currencies (id) ON DELETE SET NULL,
     name            VARCHAR(20)                  NOT NULL,
     archived        BOOL           DEFAULT false NOT NULL,
     balance         NUMERIC(19, 4) DEFAULT 0     NOT NULL,
@@ -62,15 +48,14 @@ CREATE TABLE IF NOT EXISTS accounts
 CREATE UNIQUE INDEX IF NOT EXISTS uq_accounts_user_name ON accounts (user_id, lower(name));
 
 CREATE INDEX IF NOT EXISTS idx_accounts_user_id ON accounts (user_id);
-CREATE INDEX IF NOT EXISTS idx_accounts_account_type_id ON accounts (account_type_id);
 CREATE INDEX IF NOT EXISTS idx_accounts_currency_id ON accounts (currency_id);
 
 CREATE TABLE IF NOT EXISTS categories
 (
-    id                 BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id                 INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name               VARCHAR(255) NOT NULL,
-    user_id            BIGINT       NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    parent_category_id BIGINT       REFERENCES categories (id) ON DELETE SET NULL,
+    user_id            INT       NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    parent_category_id INT       REFERENCES categories (id) ON DELETE SET NULL,
     created_at         TIMESTAMPTZ  NOT NULL DEFAULT now(),
     updated_at         TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
@@ -89,13 +74,13 @@ CREATE INDEX IF NOT EXISTS idx_categories_user_id
 
 CREATE TABLE IF NOT EXISTS transactions
 (
-    id          BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    id          INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     amount      NUMERIC(19, 4) NOT NULL,
     description VARCHAR(255),
     type        VARCHAR(20)    NOT NULL,
-    user_id     BIGINT         NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-    account_id  BIGINT         NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
-    category_id BIGINT         NOT NULL REFERENCES categories (id) ON DELETE RESTRICT,
+    user_id     INT         NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+    account_id  INT         NOT NULL REFERENCES accounts (id) ON DELETE CASCADE,
+    category_id INT         NOT NULL REFERENCES categories (id) ON DELETE RESTRICT,
     occurred_at TIMESTAMPTZ    NOT NULL,
     created_at  TIMESTAMPTZ    NOT NULL DEFAULT now(),
 
@@ -107,17 +92,3 @@ CREATE INDEX IF NOT EXISTS idx_tx_user_occurred
 
 CREATE INDEX IF NOT EXISTS idx_tx_account_occurred
     ON transactions (account_id, occurred_at DESC);
-
-CREATE TABLE IF NOT EXISTS budgets
-(
-    id             BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    user_id        BIGINT       NOT NULL REFERENCES users (id),
-    category_id    BIGINT       NOT NULL REFERENCES categories (id),
-    name           VARCHAR(255) NOT NULL,
-    month          DATE         NOT NULL,
-    planned_amount NUMERIC(14, 2),
-    created_at     TIMESTAMPTZ  NOT NULL DEFAULT now()
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS uq_budget_user_month_category
-    ON budgets (user_id, month, category_id);

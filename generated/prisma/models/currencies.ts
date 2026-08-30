@@ -32,16 +32,16 @@ export type CurrenciesAvgAggregateOutputType = {
 }
 
 export type CurrenciesSumAggregateOutputType = {
-  id: bigint | null
+  id: number | null
 }
 
 export type CurrenciesMinAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   name: string | null
 }
 
 export type CurrenciesMaxAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   name: string | null
 }
 
@@ -163,7 +163,7 @@ export type currenciesGroupByArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 export type CurrenciesGroupByOutputType = {
-  id: bigint
+  id: number
   name: string
   _count: CurrenciesCountAggregateOutputType | null
   _avg: CurrenciesAvgAggregateOutputType | null
@@ -191,7 +191,7 @@ export type currenciesWhereInput = {
   AND?: Prisma.currenciesWhereInput | Prisma.currenciesWhereInput[]
   OR?: Prisma.currenciesWhereInput[]
   NOT?: Prisma.currenciesWhereInput | Prisma.currenciesWhereInput[]
-  id?: Prisma.BigIntFilter<"currencies"> | bigint | number
+  id?: Prisma.IntFilter<"currencies"> | number
   name?: Prisma.StringFilter<"currencies"> | string
   accounts?: Prisma.AccountsListRelationFilter
 }
@@ -203,7 +203,7 @@ export type currenciesOrderByWithRelationInput = {
 }
 
 export type currenciesWhereUniqueInput = Prisma.AtLeast<{
-  id?: bigint | number
+  id?: number
   name?: string
   AND?: Prisma.currenciesWhereInput | Prisma.currenciesWhereInput[]
   OR?: Prisma.currenciesWhereInput[]
@@ -225,46 +225,43 @@ export type currenciesScalarWhereWithAggregatesInput = {
   AND?: Prisma.currenciesScalarWhereWithAggregatesInput | Prisma.currenciesScalarWhereWithAggregatesInput[]
   OR?: Prisma.currenciesScalarWhereWithAggregatesInput[]
   NOT?: Prisma.currenciesScalarWhereWithAggregatesInput | Prisma.currenciesScalarWhereWithAggregatesInput[]
-  id?: Prisma.BigIntWithAggregatesFilter<"currencies"> | bigint | number
+  id?: Prisma.IntWithAggregatesFilter<"currencies"> | number
   name?: Prisma.StringWithAggregatesFilter<"currencies"> | string
 }
 
 export type currenciesCreateInput = {
-  id?: bigint | number
   name: string
   accounts?: Prisma.accountsCreateNestedManyWithoutCurrenciesInput
 }
 
 export type currenciesUncheckedCreateInput = {
-  id?: bigint | number
+  id?: number
   name: string
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutCurrenciesInput
 }
 
 export type currenciesUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   accounts?: Prisma.accountsUpdateManyWithoutCurrenciesNestedInput
 }
 
 export type currenciesUncheckedUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutCurrenciesNestedInput
 }
 
 export type currenciesCreateManyInput = {
-  id?: bigint | number
+  id?: number
   name: string
 }
 
 export type currenciesUpdateManyMutationInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type currenciesUncheckedUpdateManyInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -311,12 +308,11 @@ export type currenciesUpdateOneRequiredWithoutAccountsNestedInput = {
 }
 
 export type currenciesCreateWithoutAccountsInput = {
-  id?: bigint | number
   name: string
 }
 
 export type currenciesUncheckedCreateWithoutAccountsInput = {
-  id?: bigint | number
+  id?: number
   name: string
 }
 
@@ -337,12 +333,11 @@ export type currenciesUpdateToOneWithWhereWithoutAccountsInput = {
 }
 
 export type currenciesUpdateWithoutAccountsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type currenciesUncheckedUpdateWithoutAccountsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
@@ -413,7 +408,7 @@ export type $currenciesPayload<ExtArgs extends runtime.Types.Extensions.Internal
     accounts: Prisma.$accountsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: bigint
+    id: number
     name: string
   }, ExtArgs["result"]["currencies"]>
   composites: {}
@@ -839,7 +834,7 @@ export interface Prisma__currenciesClient<T, Null = never, ExtArgs extends runti
  * Fields of the currencies model
  */
 export interface currenciesFieldRefs {
-  readonly id: Prisma.FieldRef<"currencies", 'BigInt'>
+  readonly id: Prisma.FieldRef<"currencies", 'Int'>
   readonly name: Prisma.FieldRef<"currencies", 'String'>
 }
     

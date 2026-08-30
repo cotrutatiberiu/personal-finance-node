@@ -35,33 +35,33 @@ export type TransactionsAvgAggregateOutputType = {
 }
 
 export type TransactionsSumAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   amount: runtime.Decimal | null
-  user_id: bigint | null
-  account_id: bigint | null
-  category_id: bigint | null
+  user_id: number | null
+  account_id: number | null
+  category_id: number | null
 }
 
 export type TransactionsMinAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   amount: runtime.Decimal | null
   description: string | null
   type: string | null
-  user_id: bigint | null
-  account_id: bigint | null
-  category_id: bigint | null
+  user_id: number | null
+  account_id: number | null
+  category_id: number | null
   occurred_at: Date | null
   created_at: Date | null
 }
 
 export type TransactionsMaxAggregateOutputType = {
-  id: bigint | null
+  id: number | null
   amount: runtime.Decimal | null
   description: string | null
   type: string | null
-  user_id: bigint | null
-  account_id: bigint | null
-  category_id: bigint | null
+  user_id: number | null
+  account_id: number | null
+  category_id: number | null
   occurred_at: Date | null
   created_at: Date | null
 }
@@ -220,13 +220,13 @@ export type transactionsGroupByArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 export type TransactionsGroupByOutputType = {
-  id: bigint
+  id: number
   amount: runtime.Decimal
   description: string | null
   type: string
-  user_id: bigint
-  account_id: bigint
-  category_id: bigint
+  user_id: number
+  account_id: number
+  category_id: number
   occurred_at: Date
   created_at: Date
   _count: TransactionsCountAggregateOutputType | null
@@ -255,13 +255,13 @@ export type transactionsWhereInput = {
   AND?: Prisma.transactionsWhereInput | Prisma.transactionsWhereInput[]
   OR?: Prisma.transactionsWhereInput[]
   NOT?: Prisma.transactionsWhereInput | Prisma.transactionsWhereInput[]
-  id?: Prisma.BigIntFilter<"transactions"> | bigint | number
+  id?: Prisma.IntFilter<"transactions"> | number
   amount?: Prisma.DecimalFilter<"transactions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"transactions"> | string | null
   type?: Prisma.StringFilter<"transactions"> | string
-  user_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
-  account_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
-  category_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
+  user_id?: Prisma.IntFilter<"transactions"> | number
+  account_id?: Prisma.IntFilter<"transactions"> | number
+  category_id?: Prisma.IntFilter<"transactions"> | number
   occurred_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsScalarRelationFilter, Prisma.accountsWhereInput>
@@ -285,16 +285,16 @@ export type transactionsOrderByWithRelationInput = {
 }
 
 export type transactionsWhereUniqueInput = Prisma.AtLeast<{
-  id?: bigint | number
+  id?: number
   AND?: Prisma.transactionsWhereInput | Prisma.transactionsWhereInput[]
   OR?: Prisma.transactionsWhereInput[]
   NOT?: Prisma.transactionsWhereInput | Prisma.transactionsWhereInput[]
   amount?: Prisma.DecimalFilter<"transactions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"transactions"> | string | null
   type?: Prisma.StringFilter<"transactions"> | string
-  user_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
-  account_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
-  category_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
+  user_id?: Prisma.IntFilter<"transactions"> | number
+  account_id?: Prisma.IntFilter<"transactions"> | number
+  category_id?: Prisma.IntFilter<"transactions"> | number
   occurred_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   accounts?: Prisma.XOR<Prisma.AccountsScalarRelationFilter, Prisma.accountsWhereInput>
@@ -323,19 +323,18 @@ export type transactionsScalarWhereWithAggregatesInput = {
   AND?: Prisma.transactionsScalarWhereWithAggregatesInput | Prisma.transactionsScalarWhereWithAggregatesInput[]
   OR?: Prisma.transactionsScalarWhereWithAggregatesInput[]
   NOT?: Prisma.transactionsScalarWhereWithAggregatesInput | Prisma.transactionsScalarWhereWithAggregatesInput[]
-  id?: Prisma.BigIntWithAggregatesFilter<"transactions"> | bigint | number
+  id?: Prisma.IntWithAggregatesFilter<"transactions"> | number
   amount?: Prisma.DecimalWithAggregatesFilter<"transactions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableWithAggregatesFilter<"transactions"> | string | null
   type?: Prisma.StringWithAggregatesFilter<"transactions"> | string
-  user_id?: Prisma.BigIntWithAggregatesFilter<"transactions"> | bigint | number
-  account_id?: Prisma.BigIntWithAggregatesFilter<"transactions"> | bigint | number
-  category_id?: Prisma.BigIntWithAggregatesFilter<"transactions"> | bigint | number
+  user_id?: Prisma.IntWithAggregatesFilter<"transactions"> | number
+  account_id?: Prisma.IntWithAggregatesFilter<"transactions"> | number
+  category_id?: Prisma.IntWithAggregatesFilter<"transactions"> | number
   occurred_at?: Prisma.DateTimeWithAggregatesFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"transactions"> | Date | string
 }
 
 export type transactionsCreateInput = {
-  id?: bigint | number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
@@ -347,19 +346,18 @@ export type transactionsCreateInput = {
 }
 
 export type transactionsUncheckedCreateInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  user_id: bigint | number
-  account_id: bigint | number
-  category_id: bigint | number
+  user_id: number
+  account_id: number
+  category_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
 
 export type transactionsUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -371,31 +369,30 @@ export type transactionsUpdateInput = {
 }
 
 export type transactionsUncheckedUpdateInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  category_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type transactionsCreateManyInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  user_id: bigint | number
-  account_id: bigint | number
-  category_id: bigint | number
+  user_id: number
+  account_id: number
+  category_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
 
 export type transactionsUpdateManyMutationInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -404,13 +401,13 @@ export type transactionsUpdateManyMutationInput = {
 }
 
 export type transactionsUncheckedUpdateManyInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  category_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -608,7 +605,6 @@ export type transactionsUncheckedUpdateManyWithoutUsersNestedInput = {
 }
 
 export type transactionsCreateWithoutAccountsInput = {
-  id?: bigint | number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
@@ -619,12 +615,12 @@ export type transactionsCreateWithoutAccountsInput = {
 }
 
 export type transactionsUncheckedCreateWithoutAccountsInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  user_id: bigint | number
-  category_id: bigint | number
+  user_id: number
+  category_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
@@ -659,19 +655,18 @@ export type transactionsScalarWhereInput = {
   AND?: Prisma.transactionsScalarWhereInput | Prisma.transactionsScalarWhereInput[]
   OR?: Prisma.transactionsScalarWhereInput[]
   NOT?: Prisma.transactionsScalarWhereInput | Prisma.transactionsScalarWhereInput[]
-  id?: Prisma.BigIntFilter<"transactions"> | bigint | number
+  id?: Prisma.IntFilter<"transactions"> | number
   amount?: Prisma.DecimalFilter<"transactions"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.StringNullableFilter<"transactions"> | string | null
   type?: Prisma.StringFilter<"transactions"> | string
-  user_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
-  account_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
-  category_id?: Prisma.BigIntFilter<"transactions"> | bigint | number
+  user_id?: Prisma.IntFilter<"transactions"> | number
+  account_id?: Prisma.IntFilter<"transactions"> | number
+  category_id?: Prisma.IntFilter<"transactions"> | number
   occurred_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
 }
 
 export type transactionsCreateWithoutCategoriesInput = {
-  id?: bigint | number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
@@ -682,12 +677,12 @@ export type transactionsCreateWithoutCategoriesInput = {
 }
 
 export type transactionsUncheckedCreateWithoutCategoriesInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  user_id: bigint | number
-  account_id: bigint | number
+  user_id: number
+  account_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
@@ -719,7 +714,6 @@ export type transactionsUpdateManyWithWhereWithoutCategoriesInput = {
 }
 
 export type transactionsCreateWithoutUsersInput = {
-  id?: bigint | number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
@@ -730,12 +724,12 @@ export type transactionsCreateWithoutUsersInput = {
 }
 
 export type transactionsUncheckedCreateWithoutUsersInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  account_id: bigint | number
-  category_id: bigint | number
+  account_id: number
+  category_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
@@ -767,18 +761,17 @@ export type transactionsUpdateManyWithWhereWithoutUsersInput = {
 }
 
 export type transactionsCreateManyAccountsInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  user_id: bigint | number
-  category_id: bigint | number
+  user_id: number
+  category_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
 
 export type transactionsUpdateWithoutAccountsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -789,40 +782,39 @@ export type transactionsUpdateWithoutAccountsInput = {
 }
 
 export type transactionsUncheckedUpdateWithoutAccountsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  category_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type transactionsUncheckedUpdateManyWithoutAccountsInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  category_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type transactionsCreateManyCategoriesInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  user_id: bigint | number
-  account_id: bigint | number
+  user_id: number
+  account_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
 
 export type transactionsUpdateWithoutCategoriesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -833,40 +825,39 @@ export type transactionsUpdateWithoutCategoriesInput = {
 }
 
 export type transactionsUncheckedUpdateWithoutCategoriesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type transactionsUncheckedUpdateManyWithoutCategoriesInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  user_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  account_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type transactionsCreateManyUsersInput = {
-  id?: bigint | number
+  id?: number
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
   type: string
-  account_id: bigint | number
-  category_id: bigint | number
+  account_id: number
+  category_id: number
   occurred_at: Date | string
   created_at?: Date | string
 }
 
 export type transactionsUpdateWithoutUsersInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
@@ -877,23 +868,23 @@ export type transactionsUpdateWithoutUsersInput = {
 }
 
 export type transactionsUncheckedUpdateWithoutUsersInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  account_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  category_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type transactionsUncheckedUpdateManyWithoutUsersInput = {
-  id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  id?: Prisma.IntFieldUpdateOperationsInput | number
   amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   type?: Prisma.StringFieldUpdateOperationsInput | string
-  account_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
-  category_id?: Prisma.BigIntFieldUpdateOperationsInput | bigint | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -982,13 +973,13 @@ export type $transactionsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     users: Prisma.$usersPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
-    id: bigint
+    id: number
     amount: runtime.Decimal
     description: string | null
     type: string
-    user_id: bigint
-    account_id: bigint
-    category_id: bigint
+    user_id: number
+    account_id: number
+    category_id: number
     occurred_at: Date
     created_at: Date
   }, ExtArgs["result"]["transactions"]>
@@ -1417,13 +1408,13 @@ export interface Prisma__transactionsClient<T, Null = never, ExtArgs extends run
  * Fields of the transactions model
  */
 export interface transactionsFieldRefs {
-  readonly id: Prisma.FieldRef<"transactions", 'BigInt'>
+  readonly id: Prisma.FieldRef<"transactions", 'Int'>
   readonly amount: Prisma.FieldRef<"transactions", 'Decimal'>
   readonly description: Prisma.FieldRef<"transactions", 'String'>
   readonly type: Prisma.FieldRef<"transactions", 'String'>
-  readonly user_id: Prisma.FieldRef<"transactions", 'BigInt'>
-  readonly account_id: Prisma.FieldRef<"transactions", 'BigInt'>
-  readonly category_id: Prisma.FieldRef<"transactions", 'BigInt'>
+  readonly user_id: Prisma.FieldRef<"transactions", 'Int'>
+  readonly account_id: Prisma.FieldRef<"transactions", 'Int'>
+  readonly category_id: Prisma.FieldRef<"transactions", 'Int'>
   readonly occurred_at: Prisma.FieldRef<"transactions", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"transactions", 'DateTime'>
 }
