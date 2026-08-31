@@ -22,3 +22,9 @@ export class AccountNotFoundError extends AppError {
     super(`Account not found: ${id}`, 404);
   }
 }
+
+export class ResourceNotFound extends AppError {
+  constructor(entity: string) {
+    super(`${entity} not found`, 409);
+  }
+}

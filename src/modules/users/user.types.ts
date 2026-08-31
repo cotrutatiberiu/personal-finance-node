@@ -1,8 +1,5 @@
-import { Prisma } from "@prisma/client/extension";
-const userWithRoles = Prisma.sat usersGetPayload<{
-  include: {
-    userRoles: {
-      include: { role: true };
-    };
-  };
+import { Prisma } from "../../../generated/prisma/client.js";
+
+export type UserWithRoles = Prisma.usersGetPayload<{
+  include: { roles: true };
 }>;

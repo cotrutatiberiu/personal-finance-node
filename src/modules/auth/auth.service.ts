@@ -1,50 +1,30 @@
 import bcrypt from "bcrypt";
 import type { RegisterRequest, LoginRequest } from "./auth.schema.js";
-import { prisma } from "../../db/client.js";
-import {
-  EmailAlreadyUsedError,
-  InvalidCredentialsError,
-} from "../../common/errors.js";
+import { InvalidCredentialsError } from "#common/errors.js";
+import * as usersMapper from "#modules/users/users.mapper.js";
+import * as jwtutils from "#common/utils/jwtUtils.js";
+import * as usersService from "#modules/users/user.service.js";
 
 export async function register(payload: RegisterRequest) {
-  const existingUser = await prisma.users.findFirst({
-    where: { email: payload.email },
-  });
-  if (existingUser) throw new EmailAlreadyUsedError(payload.email);
+  const user = await usersService.createUser(payload);
 
-  const hashedPassword = await bcrypt.hash(payload.password, 12);
-  const user = await prisma.users.create({
-    data: {
-      first_name: payload.firstName,
-      last_name: payload.lastName,
-      email: payload.email,
-      password: hashedPassword,
-      role_id: payload.roleId,
-    },
-    select: {
-      id: true,
-      email: true,
-      first_name: true,
-      last_name: true,
-      created_at: true,
-    },
-  });
-
-  return user;
+  return usersMapper.toDto(user);
 }
 
 export async function login(payload: LoginRequest) {
-  const user = await prisma.users.findFirst({
-    where: { email: payload.email },
-    include: {
-      roles: true
-    },
-  });
+  const user = await usersService.findUserByEmail(payload.email);
 
   if (!user) throw new InvalidCredentialsError();
 
   const isPasswordValid = await bcrypt.compare(payload.password, user.password);
   if (!isPasswordValid) throw new InvalidCredentialsError();
 
-  return toLoginReponse(user);
+  return {
+    accessToken: jwtutils.generateAccessToken(
+      user.email,
+      user.role_id,
+      user.roles.name,
+    ),
+    refreshToken: jwtutils.generateRefreshToken(user.email),
+  };
 }

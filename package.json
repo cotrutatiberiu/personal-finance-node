@@ -47,9 +47,9 @@
     "typescript": "^7.0.2"
   },
   "imports": {
-    "#db/*": "./src/db/*.js",
-    "#modules/*": "./src/modules/*.js",
-    "#common/*": "./src/common/*.js",
-    "#config/*": "./src/config/*.js"
+    "#db/*": "./src/db/*",
+    "#modules/*": "./src/modules/*",
+    "#common/*": "./src/common/*",
+    "#config/*": "./src/config/*"
   }
 }
