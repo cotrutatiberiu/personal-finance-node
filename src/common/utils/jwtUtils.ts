@@ -7,11 +7,12 @@ const ACCESS_SECRET_EXPIRATION_TIME = process.env.JWT_ACCESS_EXPIRATION_TIME!;
 const REFRESH_SECRET_EXPIRATION_TIME = process.env.JWT_REFRESH_EXPIRATION_TIME!;
 
 export const generateAccessToken = (
+  id: number,
   email: string,
   roleId: number,
   roleName: string,
 ) => {
-  return jwt.sign({ email, roleId, roleName }, ACCESS_SECRET, {
+  return jwt.sign({ id, email, roleId, roleName }, ACCESS_SECRET, {
     algorithm: "HS256",
     expiresIn: Number(ACCESS_SECRET_EXPIRATION_TIME),
   });

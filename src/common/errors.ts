@@ -28,3 +28,9 @@ export class ResourceNotFound extends AppError {
     super(`${entity} not found`, 409);
   }
 }
+
+export class DuplicateResource extends AppError {
+  constructor(entity: string) {
+    super(`${entity} already exists`, 409);
+  }
+}

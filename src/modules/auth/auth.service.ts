@@ -21,6 +21,7 @@ export async function login(payload: LoginRequest) {
 
   return {
     accessToken: jwtutils.generateAccessToken(
+      user.id,
       user.email,
       user.role_id,
       user.roles.name,
