@@ -3,7 +3,7 @@ import type { RegisterRequest, LoginRequest } from "./auth.schema.js";
 import { InvalidCredentialsError } from "#common/errors.js";
 import * as usersMapper from "#modules/users/users.mapper.js";
 import * as jwtutils from "#common/utils/jwtUtils.js";
-import * as usersService from "#modules/users/user.service.js";
+import * as usersService from "#modules/users/users.service.js";
 
 export async function register(payload: RegisterRequest) {
   const user = await usersService.createUser(payload);

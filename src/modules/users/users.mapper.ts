@@ -1,4 +1,4 @@
-import type { UserWithRoles } from "#modules/users/user.types.js";
+import type { UserWithRoles } from "#modules/users/users.types.js";
 
 export const toDto = (user: UserWithRoles) => {
   return {

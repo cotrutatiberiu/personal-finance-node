@@ -25,11 +25,17 @@ export class AccountNotFoundError extends AppError {
 
 export class ResourceNotFound extends AppError {
   constructor(entity: string) {
-    super(`${entity} not found`, 409);
+    super(`${entity} not found`, 404);
   }
 }
 
 export class DuplicateResource extends AppError {
+  constructor(entity: string) {
+    super(`${entity} already exists`, 409);
+  }
+}
+
+export class ConflictError extends AppError {
   constructor(entity: string) {
     super(`${entity} already exists`, 409);
   }

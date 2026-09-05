@@ -1,7 +1,13 @@
-import { DuplicateResource, ResourceNotFound } from "#common/errors.js";
+import {
+  ConflictError,
+  DuplicateResource,
+  ResourceNotFound,
+} from "#common/errors.js";
+import { logger } from "#common/logger.js";
 import type { UserDetails } from "#common/types/UserDetails.js";
 import { prisma } from "#db/client.js";
-import type * as accountsSchema from "./accounts.schema.js";
+import * as accountsMapper from "./accounts.mapper.js";
+import * as accountsSchema from "./accounts.schema.js";
 
 export async function create(
   userDetails: UserDetails,
@@ -22,6 +28,34 @@ export async function create(
   });
 }
 
+export async function getById(
+  userDetails: UserDetails,
+  payload: accountsSchema.CreateAccountRequest,
+) {
+  const account = await prisma.accounts.findFirst({
+    where: { user_id: userDetails.id, name: payload.name },
+  });
+  if (!account) throw new ResourceNotFound("Account");
+
+  return accountsMapper.toDto(account);
+}
+
+export async function getAccounts(
+  userDetails: UserDetails,
+  pageSize: number,
+  page: number,
+  orderBy: "name" | "created_at",
+) {
+  const accounts = await prisma.accounts.findMany({
+    where: { user_id: userDetails.id, archived: false },
+    take: pageSize,
+    skip: (page - 1) * pageSize,
+    orderBy: { [orderBy]: "asc" },
+  });
+  console.log(accounts);
+  return accounts.map(accountsMapper.toDto);
+}
+
 export async function update(
   userDetails: UserDetails,
   accountId: number,
@@ -31,13 +65,36 @@ export async function update(
     where: { user_id: userDetails.id, id: accountId },
   });
   if (!accountExists) throw new ResourceNotFound("Account");
-  console.log(payload.archived);
-  return await prisma.accounts.update({
+
+  const updatedAccount = await prisma.accounts.update({
     where: { id: accountId },
     data: {
       name: payload.name,
-      archived: payload.archived,
       account_type: payload.accountType,
     },
   });
+
+  logger.info({ accountId, userId: userDetails.id }, "account updated");
+
+  return updatedAccount;
+}
+
+export async function archiveById(userDetails: UserDetails, accountId: number) {
+  console.log(userDetails);
+  const account = await prisma.accounts.findFirst({
+    where: { user_id: userDetails.id, id: accountId },
+  });
+  if (!account) throw new ResourceNotFound("Account");
+  if (account.archived) throw new ResourceNotFound("Account already archived");
+
+  const updatedAccount = await prisma.accounts.update({
+    where: { id: accountId },
+    data: {
+      archived: true,
+    },
+  });
+
+  logger.info({ accountId, userId: userDetails.id }, "account archived");
+
+  return updatedAccount;
 }
