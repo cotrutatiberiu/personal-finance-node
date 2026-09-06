@@ -11,10 +11,8 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function getById(req: Request, res: Response) {
-  const account = await accountsService.getById(
-    req.userDetails!,
-    Number(req.params.id),
-  );
+  const { id } = req.validatedParams as accountsSchema.AccountIdParam;
+  const account = await accountsService.getById(req.userDetails!, id);
   res.status(200).json(account);
 }
 
@@ -31,15 +29,17 @@ export async function getAccounts(req: Request, res: Response) {
 }
 
 export async function updatebyId(req: Request, res: Response) {
+  const { id } = req.validatedParams as accountsSchema.AccountIdParam;
   const account = await accountsService.update(
     req.userDetails!,
-    Number(req.params.id),
+    id,
     req.body as accountsSchema.UpdateAccountRequest,
   );
   res.status(200).json(account);
 }
 
 export async function archiveById(req: Request, res: Response) {
-  await accountsService.archiveById(req.userDetails!, Number(req.params.id));
+  const { id } = req.validatedParams as accountsSchema.AccountIdParam;
+  await accountsService.archiveById(req.userDetails!, id);
   res.status(204).send();
 }

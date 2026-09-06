@@ -5,8 +5,14 @@ import { RoleType } from "#common/types/RoleType.js";
 
 export async function findUserByEmail(email: string) {
   return prisma.users.findFirst({
-    where: { email },
+    where: { email: { equals: email, mode: "insensitive" } },
     include: { roles: true },
+  });
+}
+
+export async function existsUserByEmail(email: string) {
+  return prisma.users.count({
+    where: { email: { equals: email, mode: "insensitive" } },
   });
 }
 
@@ -16,7 +22,7 @@ export async function createUser(data: {
   email: string;
   password: string;
 }) {
-  const existingUser = await findUserByEmail(data.email);
+  const existingUser = await existsUserByEmail(data.email);
   if (existingUser) throw new EmailAlreadyUsedError(data.email);
 
   const userRole = await prisma.roles.findFirst({

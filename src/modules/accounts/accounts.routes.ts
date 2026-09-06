@@ -1,4 +1,8 @@
-import { validate, validateQuery } from "#common/middleware/validate.js";
+import {
+  validate,
+  validateQuery,
+  validateParams,
+} from "#common/middleware/validate.js";
 import { requireAuth } from "#common/middleware/auth.js";
 import { Router, type Router as ExpressRouter } from "express";
 import * as accountsSchema from "./accounts.schema.js";
@@ -23,16 +27,23 @@ router.get(
 router.get(
   "/:id",
   requireAuth,
+  validateParams(accountsSchema.accountIdParamSchema),
   accountsController.getById,
 );
 
 router.patch(
   "/:id",
   requireAuth,
+  validateParams(accountsSchema.accountIdParamSchema),
   validate(accountsSchema.updateAccountSchema),
   accountsController.updatebyId,
 );
 
-router.patch("/:id/archive", requireAuth, accountsController.archiveById);
+router.patch(
+  "/:id/archive",
+  requireAuth,
+  validateParams(accountsSchema.accountIdParamSchema),
+  accountsController.archiveById,
+);
 
 export default router;

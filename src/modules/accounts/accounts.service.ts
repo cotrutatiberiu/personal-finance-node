@@ -13,8 +13,8 @@ export async function create(
   userDetails: UserDetails,
   payload: accountsSchema.CreateAccountRequest,
 ) {
-  const accountExists = await prisma.accounts.findFirst({
-    where: { user_id: userDetails.id, name: payload.name },
+  const accountExists = await prisma.accounts.count({
+    where: { user_id: userDetails.id, name: { equals: payload.name, mode: "insensitive" } },
   });
   if (accountExists) throw new DuplicateResource("Account");
 
@@ -58,7 +58,7 @@ export async function update(
   accountId: number,
   payload: accountsSchema.UpdateAccountRequest,
 ) {
-  const accountExists = await prisma.accounts.findFirst({
+  const accountExists = await prisma.accounts.count({
     where: { user_id: userDetails.id, id: accountId },
   });
   if (!accountExists) throw new ResourceNotFound("Account");

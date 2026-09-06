@@ -5,6 +5,7 @@ declare global {
   namespace Express {
     interface Request {
       validatedQuery?: unknown;
+      validatedParams?: unknown;
     }
   }
 }
@@ -36,6 +37,20 @@ export function validateQuery(schema: ZodType) {
       });
     }
     req.validatedQuery = result.data;
+    next();
+  };
+}
+
+export function validateParams(schema: ZodType) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.params);
+    if (!result.success) {
+      return res.status(400).json({
+        error: "Validation failed",
+        details: result.error.flatten((issue) => issue.message),
+      });
+    }
+    req.validatedParams = result.data;
     next();
   };
 }
