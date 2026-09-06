@@ -28,12 +28,9 @@ export async function create(
   });
 }
 
-export async function getById(
-  userDetails: UserDetails,
-  payload: accountsSchema.CreateAccountRequest,
-) {
+export async function getById(userDetails: UserDetails, accountId: number) {
   const account = await prisma.accounts.findFirst({
-    where: { user_id: userDetails.id, name: payload.name },
+    where: { user_id: userDetails.id, id: accountId },
   });
   if (!account) throw new ResourceNotFound("Account");
 
@@ -52,7 +49,7 @@ export async function getAccounts(
     skip: (page - 1) * pageSize,
     orderBy: { [orderBy]: "asc" },
   });
-  console.log(accounts);
+
   return accounts.map(accountsMapper.toDto);
 }
 
@@ -65,12 +62,13 @@ export async function update(
     where: { user_id: userDetails.id, id: accountId },
   });
   if (!accountExists) throw new ResourceNotFound("Account");
-
+  // TODO: convert currency values
   const updatedAccount = await prisma.accounts.update({
     where: { id: accountId },
     data: {
       name: payload.name,
       account_type: payload.accountType,
+      currency_id: payload.currencyId,
     },
   });
 
@@ -80,7 +78,6 @@ export async function update(
 }
 
 export async function archiveById(userDetails: UserDetails, accountId: number) {
-  console.log(userDetails);
   const account = await prisma.accounts.findFirst({
     where: { user_id: userDetails.id, id: accountId },
   });

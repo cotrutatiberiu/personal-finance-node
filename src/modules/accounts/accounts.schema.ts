@@ -13,6 +13,7 @@ export const createAccountSchema = z.object({
 
 export const updateAccountSchema = z.object({
   accountType: z.enum(AccountType),
+  currencyId: z.number(),
   name: z
     .string()
     .min(1, "Account name is required")

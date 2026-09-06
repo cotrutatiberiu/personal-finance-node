@@ -3,12 +3,18 @@ import * as accountsService from "./accounts.service.js";
 import * as accountsSchema from "./accounts.schema.js";
 
 export async function create(req: Request, res: Response) {
-  const account = await accountsService.create(req.userDetails!, req.body);
+  const account = await accountsService.create(
+    req.userDetails!,
+    req.body as accountsSchema.CreateAccountRequest,
+  );
   res.status(201).json(account);
 }
 
 export async function getById(req: Request, res: Response) {
-  const account = await accountsService.getById(req.userDetails!, req.body);
+  const account = await accountsService.getById(
+    req.userDetails!,
+    Number(req.params.id),
+  );
   res.status(200).json(account);
 }
 
@@ -28,7 +34,7 @@ export async function updatebyId(req: Request, res: Response) {
   const account = await accountsService.update(
     req.userDetails!,
     Number(req.params.id),
-    req.body,
+    req.body as accountsSchema.UpdateAccountRequest,
   );
   res.status(200).json(account);
 }
