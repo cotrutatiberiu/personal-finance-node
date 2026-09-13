@@ -27,3 +27,26 @@ export async function getCategories(req: Request, res: Response) {
   );
   res.status(200).json(categories);
 }
+
+export async function getSubCategories(req: Request, res: Response){
+  const {id}=req.validatedParams as categoriesSchema.CategoryIdParam;
+  const subcategories=await categoriesService.getSubCategoriesById(req.userDetails!, id);
+  res.status(200).json(subcategories);
+}
+
+export async function getTree(req: Request, res: Response) {
+  const tree = await categoriesService.getTree(req.userDetails!);
+  res.status(200).json(tree);
+}
+
+export async function reassignParent(req: Request, res: Response) {
+  const { id } = req.validatedParams as categoriesSchema.CategoryIdParam;
+  const { parentCategoryId } =
+    req.body as categoriesSchema.ReassignCategoryParentRequest;
+  const category = await categoriesService.reassignParent(
+    req.userDetails!,
+    id,
+    parentCategoryId,
+  );
+  res.status(200).json(category);
+}

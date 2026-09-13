@@ -20,11 +20,28 @@ router.get(
   categoriesController.getCategories,
 );
 
+router.get("/tree", requireAuth, categoriesController.getTree);
+
 router.get(
   "/:id",
   requireAuth,
   validateParams(categoriesSchema.categoryIdParamSchema),
   categoriesController.getById,
+);
+
+router.get(
+  "/:id/subcategories",
+  requireAuth,
+  validateParams(categoriesSchema.categoryIdParamSchema),
+  categoriesController.getSubCategories,
+);
+
+router.patch(
+  "/:id/parent",
+  requireAuth,
+  validateParams(categoriesSchema.categoryIdParamSchema),
+  validate(categoriesSchema.reassignCategoryParentSchema),
+  categoriesController.reassignParent,
 );
 
 export default router;

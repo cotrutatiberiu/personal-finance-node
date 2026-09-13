@@ -50,6 +50,7 @@
     "#db/*": "./src/db/*",
     "#modules/*": "./src/modules/*",
     "#common/*": "./src/common/*",
-    "#config/*": "./src/config/*"
+    "#config/*": "./src/config/*",
+    "#generated/*": "./generated/*"
   }
 }

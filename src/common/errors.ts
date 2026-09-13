@@ -40,3 +40,9 @@ export class ConflictError extends AppError {
     super(`${entity} already exists`, 409);
   }
 }
+
+export class InvalidCategoryParentError extends AppError {
+  constructor(message: string) {
+    super(message, 409);
+  }
+}
