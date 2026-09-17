@@ -46,3 +46,15 @@ export class InvalidCategoryParentError extends AppError {
     super(message, 409);
   }
 }
+
+export class InvalidPayloadError extends AppError {
+  constructor(message: string) {
+    super(message, 400);
+  }
+}
+
+export class InsufficientFundsError extends AppError {
+  constructor() {
+    super("Insufficient funds", 422);
+  }
+}

@@ -6,6 +6,7 @@ declare global {
     interface Request {
       validatedQuery?: unknown;
       validatedParams?: unknown;
+      validatedHeaders?: unknown;
     }
   }
 }
@@ -51,6 +52,20 @@ export function validateParams(schema: ZodType) {
       });
     }
     req.validatedParams = result.data;
+    next();
+  };
+}
+
+export function validateHeaders(schema: ZodType) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const result = schema.safeParse(req.headers);
+    if (!result.success) {
+      return res.status(400).json({
+        error: "Validation failed",
+        details: result.error.flatten((issue) => issue.message),
+      });
+    }
+    req.validatedHeaders = result.data;
     next();
   };
 }

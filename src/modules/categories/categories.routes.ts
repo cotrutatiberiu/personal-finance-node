@@ -10,7 +10,7 @@ router.post(
   "/",
   requireAuth,
   validate(categoriesSchema.createCategorySchema),
-  categoriesController.createAccountSchema,
+  categoriesController.createAccount,
 );
 
 router.get(

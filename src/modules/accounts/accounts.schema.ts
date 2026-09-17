@@ -1,7 +1,13 @@
-import { AccountType } from "#common/types/AccountType.js";
 import { paginationQuerySchema } from "#common/schemas/pagination.schema.js";
 import { z } from "zod";
 import { Prisma } from "../../../generated/prisma/client.js";
+
+export enum AccountType{
+  CASH = "CASH",
+  CARD = "CARD",
+  BANK = "BANK",
+  SAVINGS = "SAVINGS"
+}
 
 export const createAccountSchema = z.object({
   accountType: z.enum(AccountType),

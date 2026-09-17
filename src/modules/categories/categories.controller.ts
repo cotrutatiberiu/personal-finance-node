@@ -2,7 +2,7 @@ import { type Request, type Response } from "express";
 import * as categoriesService from "./categories.service.js";
 import * as categoriesSchema from "./categories.schema.js";
 
-export async function createAccountSchema(req: Request, res: Response) {
+export async function createAccount(req: Request, res: Response) {
   const category = await categoriesService.create(
     req.userDetails!,
     req.body as categoriesSchema.CreateCategoryRequest,
