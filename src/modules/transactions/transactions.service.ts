@@ -32,8 +32,6 @@ export async function create(
 
   if (!categoryExists) throw new ResourceNotFound("Category");
 
-  if (payload.amount <= 0) throw new InvalidPayloadError("Invalid amount");
-
   const transaction = await prisma.$transaction(async (tsx) => {
     if (payload.type === transactionsSchema.TransactionType.INCOME) {
       const { count } = await tsx.accounts.updateMany({
@@ -44,10 +42,7 @@ export async function create(
       });
 
       if (!count) throw new ResourceNotFound("Account");
-    } else if (
-      payload.type === transactionsSchema.TransactionType.EXPENSE ||
-      payload.type === transactionsSchema.TransactionType.TRANSFER
-    ) {
+    } else if (payload.type === transactionsSchema.TransactionType.EXPENSE) {
       const { count } = await tsx.accounts.updateMany({
         where: {
           id: payload.accountId,
@@ -68,7 +63,60 @@ export async function create(
 
         throw new InsufficientFundsError();
       }
+    } else if (payload.type === transactionsSchema.TransactionType.TRANSFER) {
+      const { accountId, destinationAccountId } = payload;
+
+      if (destinationAccountId === undefined)
+        throw new InvalidPayloadError("No destination found");
+
+      const accounts = await tsx.accounts.findMany({
+        where: {
+          id: { in: [accountId, destinationAccountId] },
+          user_id: userDetails.id,
+        },
+        select: { id: true, currency_id: true },
+      });
+
+      const source = accounts.find((a) => a.id === accountId);
+      const destination = accounts.find((a) => a.id === destinationAccountId);
+
+      if (!source || !destination) throw new ResourceNotFound("Account");
+
+      if (source.currency_id !== destination.currency_id)
+        throw new InvalidPayloadError("Accounts must use the same currency");
+
+      const debit = () =>
+        tsx.accounts.updateMany({
+          where: {
+            id: accountId,
+            user_id: userDetails.id,
+            balance: { gte: payload.amount },
+          },
+          data: { balance: { decrement: payload.amount } },
+        });
+
+      const credit = () =>
+        tsx.accounts.updateMany({
+          where: { id: destinationAccountId, user_id: userDetails.id },
+          data: { balance: { increment: payload.amount } },
+        });
+
+      // Update the lower account id first so opposite concurrent transfers lock rows in the same order.
+      let debited: { count: number };
+      let credited: { count: number };
+
+      if (accountId < destinationAccountId) {
+        debited = await debit();
+        credited = await credit();
+      } else {
+        credited = await credit();
+        debited = await debit();
+      }
+
+      if (!credited.count) throw new ResourceNotFound("Account");
+      if (!debited.count) throw new InsufficientFundsError();
     }
+
     const occurredAt = new Date();
     return await tsx.transactions.create({
       data: {
@@ -78,6 +126,7 @@ export async function create(
         user_id: userDetails.id,
         account_id: payload.accountId,
         category_id: payload.categoryId,
+        destination_account_id: payload.destinationAccountId ?? null,
         occurred_at: occurredAt,
         idempotency_key: idempotencyKey ?? null,
       },

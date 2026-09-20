@@ -13,3 +13,5 @@ router.post(
   validateHeaders(transactionsSchema.createTransactionHeadersSchema),
   transactionsController.createTransaction,
 );
+
+export default router;

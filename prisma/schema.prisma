@@ -21,7 +21,8 @@ model accounts {
   updated_at   DateTime          @default(now()) @db.Timestamptz(6)
   currencies   currencies        @relation(fields: [currency_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
   users        users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  transactions transactions[]
+  transactions transactions[] @relation("TransactionSourceAccount")
+  incoming_transfers transactions[] @relation("TransactionDestinationAccount")
 
   @@index([currency_id], map: "idx_accounts_currency_id")
   @@index([user_id], map: "idx_accounts_user_id")
@@ -66,14 +67,17 @@ model transactions {
   user_id     Int
   account_id  Int
   category_id Int
+  destination_account_id Int?
   occurred_at      DateTime   @db.Timestamptz(6)
   created_at       DateTime   @default(now()) @db.Timestamptz(6)
   idempotency_key  String?    @db.Uuid
-  accounts         accounts   @relation(fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  accounts         accounts   @relation("TransactionSourceAccount", fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  destination_account accounts? @relation("TransactionDestinationAccount", fields: [destination_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   categories       categories @relation(fields: [category_id], references: [id], onUpdate: NoAction)
   users            users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([user_id, idempotency_key])
+  @@index([destination_account_id], map: "idx_tx_destination_account")
   @@index([account_id, occurred_at(sort: Desc)], map: "idx_tx_account_occurred")
   @@index([user_id, occurred_at(sort: Desc)], map: "idx_tx_user_occurred")
 }
