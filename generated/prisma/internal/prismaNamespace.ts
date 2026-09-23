@@ -959,7 +959,8 @@ export const TransactionsScalarFieldEnum = {
   destination_account_id: 'destination_account_id',
   occurred_at: 'occurred_at',
   created_at: 'created_at',
-  idempotency_key: 'idempotency_key'
+  idempotency_key: 'idempotency_key',
+  version: 'version'
 } as const
 
 export type TransactionsScalarFieldEnum = (typeof TransactionsScalarFieldEnum)[keyof typeof TransactionsScalarFieldEnum]

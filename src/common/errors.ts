@@ -58,3 +58,9 @@ export class InsufficientFundsError extends AppError {
     super("Insufficient funds", 422);
   }
 }
+
+export class OptimisticLockError extends AppError {
+  constructor(entity: string) {
+    super(`${entity} was modified by another request, please retry`, 409);
+  }
+}

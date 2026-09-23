@@ -13,3 +13,14 @@ export async function createTransaction(req: Request, res: Response) {
   );
   res.status(201).json(transaction);
 }
+
+export async function editTransaction(req: Request, res: Response) {
+  const { id } = req.validatedParams as transactionsSchema.TransactionIdParam;
+
+  const transaction = await transactionsService.edit(
+    req.userDetails!,
+    id,
+    req.body as transactionsSchema.EditTransactionRequest,
+  );
+  res.status(200).json(transaction);
+}

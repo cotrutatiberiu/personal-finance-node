@@ -33,6 +33,7 @@ export type TransactionsAvgAggregateOutputType = {
   account_id: number | null
   category_id: number | null
   destination_account_id: number | null
+  version: number | null
 }
 
 export type TransactionsSumAggregateOutputType = {
@@ -42,6 +43,7 @@ export type TransactionsSumAggregateOutputType = {
   account_id: number | null
   category_id: number | null
   destination_account_id: number | null
+  version: number | null
 }
 
 export type TransactionsMinAggregateOutputType = {
@@ -56,6 +58,7 @@ export type TransactionsMinAggregateOutputType = {
   occurred_at: Date | null
   created_at: Date | null
   idempotency_key: string | null
+  version: number | null
 }
 
 export type TransactionsMaxAggregateOutputType = {
@@ -70,6 +73,7 @@ export type TransactionsMaxAggregateOutputType = {
   occurred_at: Date | null
   created_at: Date | null
   idempotency_key: string | null
+  version: number | null
 }
 
 export type TransactionsCountAggregateOutputType = {
@@ -84,6 +88,7 @@ export type TransactionsCountAggregateOutputType = {
   occurred_at: number
   created_at: number
   idempotency_key: number
+  version: number
   _all: number
 }
 
@@ -95,6 +100,7 @@ export type TransactionsAvgAggregateInputType = {
   account_id?: true
   category_id?: true
   destination_account_id?: true
+  version?: true
 }
 
 export type TransactionsSumAggregateInputType = {
@@ -104,6 +110,7 @@ export type TransactionsSumAggregateInputType = {
   account_id?: true
   category_id?: true
   destination_account_id?: true
+  version?: true
 }
 
 export type TransactionsMinAggregateInputType = {
@@ -118,6 +125,7 @@ export type TransactionsMinAggregateInputType = {
   occurred_at?: true
   created_at?: true
   idempotency_key?: true
+  version?: true
 }
 
 export type TransactionsMaxAggregateInputType = {
@@ -132,6 +140,7 @@ export type TransactionsMaxAggregateInputType = {
   occurred_at?: true
   created_at?: true
   idempotency_key?: true
+  version?: true
 }
 
 export type TransactionsCountAggregateInputType = {
@@ -146,6 +155,7 @@ export type TransactionsCountAggregateInputType = {
   occurred_at?: true
   created_at?: true
   idempotency_key?: true
+  version?: true
   _all?: true
 }
 
@@ -247,6 +257,7 @@ export type TransactionsGroupByOutputType = {
   occurred_at: Date
   created_at: Date
   idempotency_key: string | null
+  version: number
   _count: TransactionsCountAggregateOutputType | null
   _avg: TransactionsAvgAggregateOutputType | null
   _sum: TransactionsSumAggregateOutputType | null
@@ -284,6 +295,7 @@ export type transactionsWhereInput = {
   occurred_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   idempotency_key?: Prisma.UuidNullableFilter<"transactions"> | string | null
+  version?: Prisma.IntFilter<"transactions"> | number
   accounts?: Prisma.XOR<Prisma.AccountsScalarRelationFilter, Prisma.accountsWhereInput>
   destination_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   categories?: Prisma.XOR<Prisma.CategoriesScalarRelationFilter, Prisma.categoriesWhereInput>
@@ -302,6 +314,7 @@ export type transactionsOrderByWithRelationInput = {
   occurred_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   idempotency_key?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   accounts?: Prisma.accountsOrderByWithRelationInput
   destination_account?: Prisma.accountsOrderByWithRelationInput
   categories?: Prisma.categoriesOrderByWithRelationInput
@@ -324,6 +337,7 @@ export type transactionsWhereUniqueInput = Prisma.AtLeast<{
   occurred_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   idempotency_key?: Prisma.UuidNullableFilter<"transactions"> | string | null
+  version?: Prisma.IntFilter<"transactions"> | number
   accounts?: Prisma.XOR<Prisma.AccountsScalarRelationFilter, Prisma.accountsWhereInput>
   destination_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   categories?: Prisma.XOR<Prisma.CategoriesScalarRelationFilter, Prisma.categoriesWhereInput>
@@ -342,6 +356,7 @@ export type transactionsOrderByWithAggregationInput = {
   occurred_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   idempotency_key?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrder
   _count?: Prisma.transactionsCountOrderByAggregateInput
   _avg?: Prisma.transactionsAvgOrderByAggregateInput
   _max?: Prisma.transactionsMaxOrderByAggregateInput
@@ -364,6 +379,7 @@ export type transactionsScalarWhereWithAggregatesInput = {
   occurred_at?: Prisma.DateTimeWithAggregatesFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeWithAggregatesFilter<"transactions"> | Date | string
   idempotency_key?: Prisma.UuidNullableWithAggregatesFilter<"transactions"> | string | null
+  version?: Prisma.IntWithAggregatesFilter<"transactions"> | number
 }
 
 export type transactionsCreateInput = {
@@ -373,6 +389,7 @@ export type transactionsCreateInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
@@ -391,6 +408,7 @@ export type transactionsUncheckedCreateInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsUpdateInput = {
@@ -400,6 +418,7 @@ export type transactionsUpdateInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
@@ -418,6 +437,7 @@ export type transactionsUncheckedUpdateInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsCreateManyInput = {
@@ -432,6 +452,7 @@ export type transactionsCreateManyInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsUpdateManyMutationInput = {
@@ -441,6 +462,7 @@ export type transactionsUpdateManyMutationInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsUncheckedUpdateManyInput = {
@@ -455,6 +477,7 @@ export type transactionsUncheckedUpdateManyInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type TransactionsListRelationFilter = {
@@ -484,6 +507,7 @@ export type transactionsCountOrderByAggregateInput = {
   occurred_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   idempotency_key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type transactionsAvgOrderByAggregateInput = {
@@ -493,6 +517,7 @@ export type transactionsAvgOrderByAggregateInput = {
   account_id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
   destination_account_id?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type transactionsMaxOrderByAggregateInput = {
@@ -507,6 +532,7 @@ export type transactionsMaxOrderByAggregateInput = {
   occurred_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   idempotency_key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type transactionsMinOrderByAggregateInput = {
@@ -521,6 +547,7 @@ export type transactionsMinOrderByAggregateInput = {
   occurred_at?: Prisma.SortOrder
   created_at?: Prisma.SortOrder
   idempotency_key?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type transactionsSumOrderByAggregateInput = {
@@ -530,6 +557,7 @@ export type transactionsSumOrderByAggregateInput = {
   account_id?: Prisma.SortOrder
   category_id?: Prisma.SortOrder
   destination_account_id?: Prisma.SortOrder
+  version?: Prisma.SortOrder
 }
 
 export type transactionsCreateNestedManyWithoutAccountsInput = {
@@ -711,6 +739,7 @@ export type transactionsCreateWithoutAccountsInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
@@ -727,6 +756,7 @@ export type transactionsUncheckedCreateWithoutAccountsInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsCreateOrConnectWithoutAccountsInput = {
@@ -746,6 +776,7 @@ export type transactionsCreateWithoutDestination_accountInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
@@ -762,6 +793,7 @@ export type transactionsUncheckedCreateWithoutDestination_accountInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsCreateOrConnectWithoutDestination_accountInput = {
@@ -805,6 +837,7 @@ export type transactionsScalarWhereInput = {
   occurred_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   created_at?: Prisma.DateTimeFilter<"transactions"> | Date | string
   idempotency_key?: Prisma.UuidNullableFilter<"transactions"> | string | null
+  version?: Prisma.IntFilter<"transactions"> | number
 }
 
 export type transactionsUpsertWithWhereUniqueWithoutDestination_accountInput = {
@@ -830,6 +863,7 @@ export type transactionsCreateWithoutCategoriesInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
@@ -846,6 +880,7 @@ export type transactionsUncheckedCreateWithoutCategoriesInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsCreateOrConnectWithoutCategoriesInput = {
@@ -881,6 +916,7 @@ export type transactionsCreateWithoutUsersInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
@@ -897,6 +933,7 @@ export type transactionsUncheckedCreateWithoutUsersInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsCreateOrConnectWithoutUsersInput = {
@@ -936,6 +973,7 @@ export type transactionsCreateManyAccountsInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsCreateManyDestination_accountInput = {
@@ -949,6 +987,7 @@ export type transactionsCreateManyDestination_accountInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsUpdateWithoutAccountsInput = {
@@ -958,6 +997,7 @@ export type transactionsUpdateWithoutAccountsInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
@@ -974,6 +1014,7 @@ export type transactionsUncheckedUpdateWithoutAccountsInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsUncheckedUpdateManyWithoutAccountsInput = {
@@ -987,6 +1028,7 @@ export type transactionsUncheckedUpdateManyWithoutAccountsInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsUpdateWithoutDestination_accountInput = {
@@ -996,6 +1038,7 @@ export type transactionsUpdateWithoutDestination_accountInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
@@ -1012,6 +1055,7 @@ export type transactionsUncheckedUpdateWithoutDestination_accountInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsUncheckedUpdateManyWithoutDestination_accountInput = {
@@ -1025,6 +1069,7 @@ export type transactionsUncheckedUpdateManyWithoutDestination_accountInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsCreateManyCategoriesInput = {
@@ -1038,6 +1083,7 @@ export type transactionsCreateManyCategoriesInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsUpdateWithoutCategoriesInput = {
@@ -1047,6 +1093,7 @@ export type transactionsUpdateWithoutCategoriesInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
@@ -1063,6 +1110,7 @@ export type transactionsUncheckedUpdateWithoutCategoriesInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsUncheckedUpdateManyWithoutCategoriesInput = {
@@ -1076,6 +1124,7 @@ export type transactionsUncheckedUpdateManyWithoutCategoriesInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsCreateManyUsersInput = {
@@ -1089,6 +1138,7 @@ export type transactionsCreateManyUsersInput = {
   occurred_at: Date | string
   created_at?: Date | string
   idempotency_key?: string | null
+  version?: number
 }
 
 export type transactionsUpdateWithoutUsersInput = {
@@ -1098,6 +1148,7 @@ export type transactionsUpdateWithoutUsersInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
@@ -1114,6 +1165,7 @@ export type transactionsUncheckedUpdateWithoutUsersInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsUncheckedUpdateManyWithoutUsersInput = {
@@ -1127,6 +1179,7 @@ export type transactionsUncheckedUpdateManyWithoutUsersInput = {
   occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 
@@ -1143,6 +1196,7 @@ export type transactionsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   occurred_at?: boolean
   created_at?: boolean
   idempotency_key?: boolean
+  version?: boolean
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
   destination_account?: boolean | Prisma.transactions$destination_accountArgs<ExtArgs>
   categories?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
@@ -1161,6 +1215,7 @@ export type transactionsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   occurred_at?: boolean
   created_at?: boolean
   idempotency_key?: boolean
+  version?: boolean
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
   destination_account?: boolean | Prisma.transactions$destination_accountArgs<ExtArgs>
   categories?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
@@ -1179,6 +1234,7 @@ export type transactionsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   occurred_at?: boolean
   created_at?: boolean
   idempotency_key?: boolean
+  version?: boolean
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
   destination_account?: boolean | Prisma.transactions$destination_accountArgs<ExtArgs>
   categories?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
@@ -1197,9 +1253,10 @@ export type transactionsSelectScalar = {
   occurred_at?: boolean
   created_at?: boolean
   idempotency_key?: boolean
+  version?: boolean
 }
 
-export type transactionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "amount" | "description" | "type" | "user_id" | "account_id" | "category_id" | "destination_account_id" | "occurred_at" | "created_at" | "idempotency_key", ExtArgs["result"]["transactions"]>
+export type transactionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "amount" | "description" | "type" | "user_id" | "account_id" | "category_id" | "destination_account_id" | "occurred_at" | "created_at" | "idempotency_key" | "version", ExtArgs["result"]["transactions"]>
 export type transactionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
   destination_account?: boolean | Prisma.transactions$destination_accountArgs<ExtArgs>
@@ -1239,6 +1296,7 @@ export type $transactionsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     occurred_at: Date
     created_at: Date
     idempotency_key: string | null
+    version: number
   }, ExtArgs["result"]["transactions"]>
   composites: {}
 }
@@ -1677,6 +1735,7 @@ export interface transactionsFieldRefs {
   readonly occurred_at: Prisma.FieldRef<"transactions", 'DateTime'>
   readonly created_at: Prisma.FieldRef<"transactions", 'DateTime'>
   readonly idempotency_key: Prisma.FieldRef<"transactions", 'String'>
+  readonly version: Prisma.FieldRef<"transactions", 'Int'>
 }
     
 
