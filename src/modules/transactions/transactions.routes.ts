@@ -3,6 +3,7 @@ import {
   validate,
   validateHeaders,
   validateParams,
+  validateQuery,
 } from "#common/middleware/validate.js";
 import { Router, type Router as ExpressRouter } from "express";
 import * as transactionsSchema from "./transactions.schema.js";
@@ -16,6 +17,13 @@ router.post(
   validate(transactionsSchema.createTransactionSchema),
   validateHeaders(transactionsSchema.createTransactionHeadersSchema),
   transactionsController.createTransaction,
+);
+
+router.get(
+  "/",
+  requireAuth,
+  validateQuery(transactionsSchema.getTransactionsQuerySchema),
+  transactionsController.getTransactions,
 );
 
 router.patch(

@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+export enum SortOrder {
+  ASC = "asc",
+  DESC = "desc",
+}
+
 export const paginationQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(10).default(10),

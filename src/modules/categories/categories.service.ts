@@ -1,6 +1,7 @@
 import type { UserDetails } from "#common/types/UserDetails.js";
 import * as categoriesSchema from "./categories.schema.js";
 import { prisma } from "#db/client.js";
+import { SortOrder } from "#common/schemas/pagination.schema.js";
 import {
   DuplicateResource,
   InvalidCategoryParentError,
@@ -73,13 +74,14 @@ export async function getCategories(
   userDetails: UserDetails,
   pageSize: number,
   page: number,
-  orderBy: "name" | "created_at",
+  orderBy: categoriesSchema.CategoryOrderBy,
+  order: SortOrder,
 ) {
   const categories = await prisma.categories.findMany({
     where: { user_id: userDetails.id },
     take: pageSize,
     skip: (page - 1) * pageSize,
-    orderBy: { [orderBy]: "asc" },
+    orderBy: [{ [orderBy]: order }, { id: order }],
   });
 
   return categories.map(categoriesMapper.toDto);

@@ -1,4 +1,7 @@
-import { paginationQuerySchema } from "#common/schemas/pagination.schema.js";
+import {
+  paginationQuerySchema,
+  SortOrder,
+} from "#common/schemas/pagination.schema.js";
 import { z } from "zod";
 import { Prisma } from "../../../generated/prisma/client.js";
 
@@ -7,6 +10,11 @@ export enum AccountType{
   CARD = "CARD",
   BANK = "BANK",
   SAVINGS = "SAVINGS"
+}
+
+export enum AccountOrderBy {
+  NAME = "name",
+  CREATED_AT = "created_at",
 }
 
 export const createAccountSchema = z.object({
@@ -32,7 +40,8 @@ export const accountIdParamSchema = z.object({
 });
 
 export const getAccountsQuerySchema = paginationQuerySchema.extend({
-  orderBy: z.enum(["name", "created_at"]).default("created_at"),
+  orderBy: z.enum(AccountOrderBy).default(AccountOrderBy.CREATED_AT),
+  order: z.enum(SortOrder).default(SortOrder.ASC),
 });
 
 export type CreateAccountRequest = z.infer<typeof createAccountSchema>;

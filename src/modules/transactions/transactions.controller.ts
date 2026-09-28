@@ -41,3 +41,16 @@ export async function deleteTransactionById(req: Request, res: Response) {
   await transactionsService.deleteTransactionById(req.userDetails!, id);
   res.status(204).send();
 }
+
+export async function getTransactions(req: Request, res: Response) {
+    const { page, pageSize, orderBy, order } =
+      req.validatedQuery as transactionsSchema.GetTransactionsQuery;
+    const transactions = await transactionsService.getTransactions(
+      req.userDetails!,
+      pageSize,
+      page,
+      orderBy,
+      order,
+    );
+    res.status(200).json(transactions);
+}

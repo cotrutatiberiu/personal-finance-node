@@ -17,13 +17,14 @@ export async function getById(req: Request, res: Response) {
 }
 
 export async function getCategories(req: Request, res: Response) {
-  const { page, pageSize, orderBy } =
+  const { page, pageSize, orderBy, order } =
     req.validatedQuery as categoriesSchema.GetCategoriesQuery;
   const categories = await categoriesService.getCategories(
     req.userDetails!,
     pageSize,
     page,
     orderBy,
+    order,
   );
   res.status(200).json(categories);
 }

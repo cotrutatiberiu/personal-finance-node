@@ -6,6 +6,7 @@ import {
 import { logger } from "#common/logger.js";
 import type { UserDetails } from "#common/types/UserDetails.js";
 import { prisma } from "#db/client.js";
+import { SortOrder } from "#common/schemas/pagination.schema.js";
 import * as accountsMapper from "./accounts.mapper.js";
 import * as accountsSchema from "./accounts.schema.js";
 
@@ -41,13 +42,14 @@ export async function getAccounts(
   userDetails: UserDetails,
   pageSize: number,
   page: number,
-  orderBy: "name" | "created_at",
+  orderBy: accountsSchema.AccountOrderBy,
+  order: SortOrder,
 ) {
   const accounts = await prisma.accounts.findMany({
     where: { user_id: userDetails.id, archived: false },
     take: pageSize,
     skip: (page - 1) * pageSize,
-    orderBy: { [orderBy]: "asc" },
+    orderBy: [{ [orderBy]: order }, { id: order }],
   });
 
   return accounts.map(accountsMapper.toDto);

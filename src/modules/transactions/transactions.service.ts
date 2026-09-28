@@ -8,6 +8,7 @@ import {
   ResourceNotFound,
 } from "#common/errors.js";
 import { Prisma } from "#generated/prisma/client.js";
+import { SortOrder } from "#common/schemas/pagination.schema.js";
 
 const debit = (
   tsx: Prisma.TransactionClient,
@@ -372,4 +373,21 @@ export async function deleteTransactionById(
 
     await revertTransactionEffect(tsx, deletedTransaction);
   });
+}
+
+export async function getTransactions(
+  userDetails: UserDetails,
+  pageSize: number,
+  page: number,
+  orderBy: transactionsSchema.TransactionOrderBy,
+  order: SortOrder,
+) {
+  const transactions = await prisma.transactions.findMany({
+    where: { user_id: userDetails.id },
+    take: pageSize,
+    skip: (page - 1) * pageSize,
+    orderBy: [{ [orderBy]: order }, { id: order }],
+  });
+
+  return transactions;
 }

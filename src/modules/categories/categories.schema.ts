@@ -1,6 +1,14 @@
-import { paginationQuerySchema } from "#common/schemas/pagination.schema.js";
+import {
+  paginationQuerySchema,
+  SortOrder,
+} from "#common/schemas/pagination.schema.js";
 import { Prisma } from "#generated/prisma/client.js";
 import { z } from "zod";
+
+export enum CategoryOrderBy {
+  NAME = "name",
+  CREATED_AT = "created_at",
+}
 
 export const createCategorySchema = z.object({
   parentCategoryId: z.number().nullish(),
@@ -15,7 +23,8 @@ export const categoryIdParamSchema = z.object({
 });
 
 export const getCategoriesQuerySchema = paginationQuerySchema.extend({
-  orderBy: z.enum(["name", "created_at"]).default("created_at"),
+  orderBy: z.enum(CategoryOrderBy).default(CategoryOrderBy.CREATED_AT),
+  order: z.enum(SortOrder).default(SortOrder.ASC),
 });
 
 export const reassignCategoryParentSchema = z.object({
