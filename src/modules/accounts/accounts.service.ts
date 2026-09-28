@@ -6,6 +6,8 @@ import {
 import { logger } from "#common/logger.js";
 import type { UserDetails } from "#common/types/UserDetails.js";
 import { prisma } from "#db/client.js";
+import { toPaginatedResponse } from "#common/types/PaginatedResponse.js";
+import { Prisma } from "#generated/prisma/client.js";
 import { SortOrder } from "#common/schemas/pagination.schema.js";
 import * as accountsMapper from "./accounts.mapper.js";
 import * as accountsSchema from "./accounts.schema.js";
@@ -45,14 +47,19 @@ export async function getAccounts(
   orderBy: accountsSchema.AccountOrderBy,
   order: SortOrder,
 ) {
-  const accounts = await prisma.accounts.findMany({
-    where: { user_id: userDetails.id, archived: false },
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-    orderBy: [{ [orderBy]: order }, { id: order }],
-  });
+  const where: Prisma.accountsWhereInput = { user_id: userDetails.id, archived: false };
 
-  return accounts.map(accountsMapper.toDto);
+  const [accounts, total] = await Promise.all([
+    prisma.accounts.findMany({
+      where,
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      orderBy: [{ [orderBy]: order }, { id: order }],
+    }),
+    prisma.accounts.count({ where }),
+  ]);
+
+  return toPaginatedResponse(accounts.map(accountsMapper.toDto), total, page, pageSize);
 }
 
 export async function update(

@@ -1,6 +1,8 @@
 import type { UserDetails } from "#common/types/UserDetails.js";
 import * as categoriesSchema from "./categories.schema.js";
 import { prisma } from "#db/client.js";
+import { toPaginatedResponse } from "#common/types/PaginatedResponse.js";
+import { Prisma } from "#generated/prisma/client.js";
 import { SortOrder } from "#common/schemas/pagination.schema.js";
 import {
   DuplicateResource,
@@ -77,14 +79,19 @@ export async function getCategories(
   orderBy: categoriesSchema.CategoryOrderBy,
   order: SortOrder,
 ) {
-  const categories = await prisma.categories.findMany({
-    where: { user_id: userDetails.id },
-    take: pageSize,
-    skip: (page - 1) * pageSize,
-    orderBy: [{ [orderBy]: order }, { id: order }],
-  });
+  const where: Prisma.categoriesWhereInput = { user_id: userDetails.id };
 
-  return categories.map(categoriesMapper.toDto);
+  const [categories, total] = await Promise.all([
+    prisma.categories.findMany({
+      where,
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+      orderBy: [{ [orderBy]: order }, { id: order }],
+    }),
+    prisma.categories.count({ where }),
+  ]);
+
+  return toPaginatedResponse(categories.map(categoriesMapper.toDto), total, page, pageSize);
 }
 
 export async function getSubCategoriesById(

@@ -7,5 +7,5 @@ export enum SortOrder {
 
 export const paginationQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
-  pageSize: z.coerce.number().int().min(10).default(10),
+  pageSize: z.coerce.number().int().min(10).max(100).default(10),
 });

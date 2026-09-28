@@ -43,14 +43,9 @@ export async function deleteTransactionById(req: Request, res: Response) {
 }
 
 export async function getTransactions(req: Request, res: Response) {
-    const { page, pageSize, orderBy, order } =
-      req.validatedQuery as transactionsSchema.GetTransactionsQuery;
     const transactions = await transactionsService.getTransactions(
       req.userDetails!,
-      pageSize,
-      page,
-      orderBy,
-      order,
+      req.validatedQuery as transactionsSchema.GetTransactionsQuery,
     );
     res.status(200).json(transactions);
 }
