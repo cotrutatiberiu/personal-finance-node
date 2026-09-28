@@ -24,3 +24,20 @@ export async function editTransaction(req: Request, res: Response) {
   );
   res.status(200).json(transaction);
 }
+
+export async function getTransactionById(req: Request, res: Response) {
+  const { id } = req.validatedParams as transactionsSchema.TransactionIdParam;
+
+  const transaction = await transactionsService.getTransactionById(
+    req.userDetails!,
+    id,
+  );
+  res.status(200).json(transaction);
+}
+
+export async function deleteTransactionById(req: Request, res: Response) {
+  const { id } = req.validatedParams as transactionsSchema.TransactionIdParam;
+
+  await transactionsService.deleteTransactionById(req.userDetails!, id);
+  res.status(204).send();
+}

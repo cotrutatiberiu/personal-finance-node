@@ -26,4 +26,18 @@ router.patch(
   transactionsController.editTransaction,
 );
 
+router.get(
+  "/:id",
+  requireAuth,
+  validateParams(transactionsSchema.transactionIdParamSchema),
+  transactionsController.getTransactionById,
+);
+
+router.delete(
+  "/:id",
+  requireAuth,
+  validateParams(transactionsSchema.transactionIdParamSchema),
+  transactionsController.deleteTransactionById,
+);
+
 export default router;

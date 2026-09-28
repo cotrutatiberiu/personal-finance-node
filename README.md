@@ -2,7 +2,7 @@ pnpm prisma db seed
 
 
 pnpm prisma migrate dev
-What it does: Compares your prisma/schema.prisma against your local database. It creates a new .sql file in prisma/migrations/, applies it to your database, updates your TypeScript client types, and runs prisma db seed (if configured).
+What it does: Compares your prisma/schema.prisma against your local database. It creates a new .sql file in prisma/migrations/ and applies it to your database. In Prisma 7 it does NOT regenerate the client — run pnpm prisma generate afterwards.
 When to use: Local development whenever you change schema.prisma.
 
 pnpm prisma migrate dev --name add_transactions_table
@@ -22,9 +22,9 @@ What it does: Reads an existing PostgreSQL database and updates prisma/schema.pr
 When to use: When you write tables directly using .sql scripts or GUI tools (e.g., pgAdmin) and need your Prisma schema to mirror the database.
 
 pnpm prisma generate
-What it does: Parses prisma/schema.prisma and updates static TypeScript types inside node_modules/@prisma/client.
+What it does: Parses prisma/schema.prisma and regenerates the client and its TypeScript types in generated/prisma (the generator's output path).
 When to use:
-Runs automatically after pnpm prisma migrate dev.
+After every schema change — pnpm prisma migrate dev does not run it for you in Prisma 7.
 Must be run manually in multi-stage Docker builds.
 Must be run manually on fresh repository clones (pnpm install).
 

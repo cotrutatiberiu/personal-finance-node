@@ -128,7 +128,7 @@ export const TransactionsScalarFieldEnum = {
   category_id: 'category_id',
   destination_account_id: 'destination_account_id',
   occurred_at: 'occurred_at',
-  created_at: 'created_at',
+  updated_at: 'updated_at',
   idempotency_key: 'idempotency_key',
   version: 'version'
 } as const

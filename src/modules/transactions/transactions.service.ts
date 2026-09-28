@@ -5,7 +5,7 @@ import {
   InsufficientFundsError,
   InvalidPayloadError,
   OptimisticLockError,
-  ResourceNotFound
+  ResourceNotFound,
 } from "#common/errors.js";
 import { Prisma } from "#generated/prisma/client.js";
 
@@ -272,6 +272,7 @@ export async function edit(
           description: payload.description,
         }),
         ...(payload.categoryId && { category_id: payload.categoryId }),
+        updated_at: new Date(),
         version: { increment: 1 },
       },
     });
@@ -312,8 +313,12 @@ async function revertTransactionEffect(
     existingTransaction.type === transactionsSchema.TransactionType.TRANSFER &&
     existingTransaction.destination_account_id !== null
   ) {
-    const { account_id: sourceId, destination_account_id: destId, user_id, amount } =
-      existingTransaction;
+    const {
+      account_id: sourceId,
+      destination_account_id: destId,
+      user_id,
+      amount,
+    } = existingTransaction;
 
     let debitResult: { count: number };
 
@@ -327,4 +332,44 @@ async function revertTransactionEffect(
 
     if (!debitResult.count) throw new InsufficientFundsError();
   }
+}
+
+export async function getTransactionById(userDetails: UserDetails, id: number) {
+  const transaction = await prisma.transactions.findFirst({
+    where: { user_id: userDetails.id, id },
+    include: {
+      accounts: { select: { id: true, name: true } },
+      destination_account: { select: { id: true, name: true } },
+      categories: { select: { id: true, name: true } },
+    },
+  });
+
+  if (!transaction) throw new ResourceNotFound("Transaction");
+
+  return transaction;
+}
+
+export async function deleteTransactionById(
+  userDetails: UserDetails,
+  id: number,
+) {
+  await prisma.$transaction(async (tsx) => {
+    let deletedTransaction: transactionsSchema.Transaction;
+
+    try {
+      deletedTransaction = await tsx.transactions.delete({
+        where: { user_id: userDetails.id, id },
+      });
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === "P2025"
+      )
+        throw new ResourceNotFound("Transaction");
+
+      throw err;
+    }
+
+    await revertTransactionEffect(tsx, deletedTransaction);
+  });
 }
