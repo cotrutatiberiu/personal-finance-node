@@ -241,7 +241,6 @@ export async function edit(
 
   if (!existingTransaction) throw new ResourceNotFound("Transaction");
 
-  // PATCH semantics: anything not sent keeps its stored value.
   const amount = payload.amount ?? existingTransaction.amount;
   const type =
     payload.type ??
