@@ -75,34 +75,15 @@ export const editTransactionSchema = z
   .object({
     amount: amountSchema.optional(),
     description: z.string().trim().max(255).optional(),
-    type: z.enum(TransactionType),
-    accountId: z.number().int().positive(),
+    type: z.enum(TransactionType).optional(),
+    accountId: z.number().int().positive().optional(),
     categoryId: z.number().int().positive().optional(),
     destinationAccountId: z.number().int().positive().optional(),
   })
-  .superRefine((val, ctx) => {
-    if (val.type === TransactionType.TRANSFER) {
-      if (val.destinationAccountId === undefined) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["destinationAccountId"],
-          message: "Destination account is required for transfers",
-        });
-      } else if (val.destinationAccountId === val.accountId) {
-        ctx.addIssue({
-          code: "custom",
-          path: ["destinationAccountId"],
-          message: "Destination account must differ from source account",
-        });
-      }
-    } else if (val.destinationAccountId !== undefined) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["destinationAccountId"],
-        message: "Destination account is only allowed for transfers",
-      });
-    }
-  });
+  .refine(
+    (val) => Object.keys(val).length > 0,
+    "At least one field is required",
+  );
 
 export type EditTransactionRequest = z.infer<typeof editTransactionSchema>;
 

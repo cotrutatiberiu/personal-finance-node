@@ -36,15 +36,54 @@ const credit = (
     data: { balance: { increment: amount } },
   });
 
+const withdraw = (
+  tsx: Prisma.TransactionClient,
+  userId: number,
+  accountId: number,
+  amount: Prisma.Decimal,
+) =>
+  tsx.accounts.updateMany({
+    where: { id: accountId, user_id: userId },
+    data: { balance: { decrement: amount } },
+  });
+
+// Locks every touched account in id order before any balance changes, so
+// operations touching the same accounts queue instead of deadlocking.
+async function lockAccounts(
+  tsx: Prisma.TransactionClient,
+  accountIds: (number | null | undefined)[],
+) {
+  const ids = [...new Set(accountIds.filter((id) => id != null))];
+
+  await tsx.$queryRaw`SELECT id FROM accounts WHERE id IN (${Prisma.join(ids)}) ORDER BY id FOR UPDATE`;
+}
+
+// The invariant is "no account ends negative", not "no step dips negative".
+async function assertNonNegativeBalances(
+  tsx: Prisma.TransactionClient,
+  accountIds: (number | null | undefined)[],
+) {
+  const ids = accountIds.filter((id) => id != null);
+
+  const overdrawn = await tsx.accounts.count({
+    where: { id: { in: ids }, balance: { lt: 0 } },
+  });
+
+  if (overdrawn) throw new InsufficientFundsError();
+}
+
 export async function create(
   userDetails: UserDetails,
   payload: transactionsSchema.CreateTransactionRequest,
   idempotencyKey?: string,
 ) {
-  if (idempotencyKey) {
-    const existing = await prisma.transactions.findFirst({
-      where: { user_id: userDetails.id, idempotency_key: idempotencyKey },
+  const findByIdempotencyKey = (key: string) =>
+    prisma.transactions.findFirst({
+      where: { user_id: userDetails.id, idempotency_key: key },
     });
+
+  if (idempotencyKey) {
+    const existing = await findByIdempotencyKey(idempotencyKey);
 
     if (existing) return existing;
   }
@@ -61,102 +100,117 @@ export async function create(
 
   if (!categoryExists) throw new ResourceNotFound("Category");
 
-  const transaction = await prisma.$transaction(async (tsx) => {
-    if (payload.type === transactionsSchema.TransactionType.INCOME) {
-      const { count } = await tsx.accounts.updateMany({
-        where: { id: payload.accountId, user_id: userDetails.id },
-        data: {
-          balance: { increment: payload.amount },
-        },
-      });
-
-      if (!count) throw new ResourceNotFound("Account");
-    } else if (payload.type === transactionsSchema.TransactionType.EXPENSE) {
-      const { count } = await tsx.accounts.updateMany({
-        where: {
-          id: payload.accountId,
-          user_id: userDetails.id,
-          balance: { gte: payload.amount },
-        },
-        data: {
-          balance: { decrement: payload.amount },
-        },
-      });
-
-      if (!count) {
-        const exists = await tsx.accounts.count({
+  try {
+    return await prisma.$transaction(async (tsx) => {
+      if (payload.type === transactionsSchema.TransactionType.INCOME) {
+        const { count } = await tsx.accounts.updateMany({
           where: { id: payload.accountId, user_id: userDetails.id },
+          data: {
+            balance: { increment: payload.amount },
+          },
         });
 
-        if (!exists) throw new ResourceNotFound("Account");
+        if (!count) throw new ResourceNotFound("Account");
+      } else if (payload.type === transactionsSchema.TransactionType.EXPENSE) {
+        const { count } = await tsx.accounts.updateMany({
+          where: {
+            id: payload.accountId,
+            user_id: userDetails.id,
+            balance: { gte: payload.amount },
+          },
+          data: {
+            balance: { decrement: payload.amount },
+          },
+        });
 
-        throw new InsufficientFundsError();
+        if (!count) {
+          const exists = await tsx.accounts.count({
+            where: { id: payload.accountId, user_id: userDetails.id },
+          });
+
+          if (!exists) throw new ResourceNotFound("Account");
+
+          throw new InsufficientFundsError();
+        }
+      } else if (payload.type === transactionsSchema.TransactionType.TRANSFER) {
+        const { accountId, destinationAccountId } = payload;
+
+        if (destinationAccountId === undefined)
+          throw new InvalidPayloadError("No destination found");
+
+        const accounts = await tsx.accounts.findMany({
+          where: {
+            id: { in: [accountId, destinationAccountId] },
+            user_id: userDetails.id,
+          },
+          select: { id: true, currency_id: true },
+        });
+
+        const source = accounts.find((a) => a.id === accountId);
+        const destination = accounts.find((a) => a.id === destinationAccountId);
+
+        if (!source || !destination) throw new ResourceNotFound("Account");
+
+        if (source.currency_id !== destination.currency_id)
+          throw new InvalidPayloadError("Accounts must use the same currency");
+
+        // Update the lower account id first so opposite concurrent transfers lock rows in the same order.
+        let debited: { count: number };
+        let credited: { count: number };
+
+        if (accountId < destinationAccountId) {
+          debited = await debit(tsx, userDetails.id, accountId, payload.amount);
+          credited = await credit(
+            tsx,
+            userDetails.id,
+            destinationAccountId,
+            payload.amount,
+          );
+        } else {
+          credited = await credit(
+            tsx,
+            userDetails.id,
+            destinationAccountId,
+            payload.amount,
+          );
+          debited = await debit(tsx, userDetails.id, accountId, payload.amount);
+        }
+
+        if (!credited.count) throw new ResourceNotFound("Account");
+        if (!debited.count) throw new InsufficientFundsError();
       }
-    } else if (payload.type === transactionsSchema.TransactionType.TRANSFER) {
-      const { accountId, destinationAccountId } = payload;
 
-      if (destinationAccountId === undefined)
-        throw new InvalidPayloadError("No destination found");
-
-      const accounts = await tsx.accounts.findMany({
-        where: {
-          id: { in: [accountId, destinationAccountId] },
+      const occurredAt = new Date();
+      return await tsx.transactions.create({
+        data: {
+          amount: payload.amount,
+          description: payload.description || null,
+          type: payload.type,
           user_id: userDetails.id,
+          account_id: payload.accountId,
+          category_id: payload.categoryId,
+          destination_account_id: payload.destinationAccountId ?? null,
+          occurred_at: occurredAt,
+          idempotency_key: idempotencyKey ?? null,
         },
-        select: { id: true, currency_id: true },
       });
+    });
+  } catch (err) {
+    // Two requests with the same key both missed the fast path; the unique index on
+    // (user_id, idempotency_key) rejected the second insert and rolled back its balance
+    // change. Answer the retry with the transaction the first request created.
+    if (
+      idempotencyKey &&
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === "P2002"
+    ) {
+      const existing = await findByIdempotencyKey(idempotencyKey);
 
-      const source = accounts.find((a) => a.id === accountId);
-      const destination = accounts.find((a) => a.id === destinationAccountId);
-
-      if (!source || !destination) throw new ResourceNotFound("Account");
-
-      if (source.currency_id !== destination.currency_id)
-        throw new InvalidPayloadError("Accounts must use the same currency");
-
-      // Update the lower account id first so opposite concurrent transfers lock rows in the same order.
-      let debited: { count: number };
-      let credited: { count: number };
-
-      if (accountId < destinationAccountId) {
-        debited = await debit(tsx, userDetails.id, accountId, payload.amount);
-        credited = await credit(
-          tsx,
-          userDetails.id,
-          destinationAccountId,
-          payload.amount,
-        );
-      } else {
-        credited = await credit(
-          tsx,
-          userDetails.id,
-          destinationAccountId,
-          payload.amount,
-        );
-        debited = await debit(tsx, userDetails.id, accountId, payload.amount);
-      }
-
-      if (!credited.count) throw new ResourceNotFound("Account");
-      if (!debited.count) throw new InsufficientFundsError();
+      if (existing) return existing;
     }
 
-    const occurredAt = new Date();
-    return await tsx.transactions.create({
-      data: {
-        amount: payload.amount,
-        description: payload.description || null,
-        type: payload.type,
-        user_id: userDetails.id,
-        account_id: payload.accountId,
-        category_id: payload.categoryId,
-        destination_account_id: payload.destinationAccountId ?? null,
-        occurred_at: occurredAt,
-        idempotency_key: idempotencyKey ?? null,
-      },
-    });
-  });
-
-  return transaction;
+    throw err;
+  }
 }
 
 export async function edit(
@@ -187,24 +241,60 @@ export async function edit(
 
   if (!existingTransaction) throw new ResourceNotFound("Transaction");
 
+  // PATCH semantics: anything not sent keeps its stored value.
   const amount = payload.amount ?? existingTransaction.amount;
+  const type =
+    payload.type ??
+    (existingTransaction.type as transactionsSchema.TransactionType);
+  const accountId = payload.accountId ?? existingTransaction.account_id;
+  // A stored destination is kept only while the transaction stays a transfer.
+  const destinationAccountId =
+    payload.destinationAccountId ??
+    (type === transactionsSchema.TransactionType.TRANSFER
+      ? existingTransaction.destination_account_id
+      : null);
+
+  if (type === transactionsSchema.TransactionType.TRANSFER) {
+    if (destinationAccountId === null)
+      throw new InvalidPayloadError(
+        "Destination account is required for transfers",
+      );
+
+    if (destinationAccountId === accountId)
+      throw new InvalidPayloadError(
+        "Destination account must differ from source account",
+      );
+  } else if (destinationAccountId !== null) {
+    throw new InvalidPayloadError(
+      "Destination account is only allowed for transfers",
+    );
+  }
+
+  const touchedAccountIds = [
+    existingTransaction.account_id,
+    existingTransaction.destination_account_id,
+    accountId,
+    destinationAccountId,
+  ];
 
   const transaction = await prisma.$transaction(async (tsx) => {
+    // Same lock order as delete: the transaction row first, then the accounts by id.
+    await tsx.$queryRaw`SELECT id FROM transactions WHERE id = ${transactionId} FOR UPDATE`;
+    await lockAccounts(tsx, touchedAccountIds);
+
     await revertTransactionEffect(tsx, existingTransaction);
 
-    let destinationAccountId: number | null = null;
-
-    if (payload.type === transactionsSchema.TransactionType.INCOME) {
+    if (type === transactionsSchema.TransactionType.INCOME) {
       const { count } = await tsx.accounts.updateMany({
-        where: { id: payload.accountId, user_id: userDetails.id },
+        where: { id: accountId, user_id: userDetails.id },
         data: { balance: { increment: amount } },
       });
 
       if (!count) throw new ResourceNotFound("Account");
-    } else if (payload.type === transactionsSchema.TransactionType.EXPENSE) {
+    } else if (type === transactionsSchema.TransactionType.EXPENSE) {
       const { count } = await tsx.accounts.updateMany({
         where: {
-          id: payload.accountId,
+          id: accountId,
           user_id: userDetails.id,
           balance: { gte: amount },
         },
@@ -213,20 +303,18 @@ export async function edit(
 
       if (!count) {
         const exists = await tsx.accounts.count({
-          where: { id: payload.accountId, user_id: userDetails.id },
+          where: { id: accountId, user_id: userDetails.id },
         });
 
         if (!exists) throw new ResourceNotFound("Account");
 
         throw new InsufficientFundsError();
       }
-    } else if (payload.type === transactionsSchema.TransactionType.TRANSFER) {
-      const { accountId, destinationAccountId: destId } = payload;
-
-      if (destId === undefined)
-        throw new InvalidPayloadError("No destination found");
-
-      destinationAccountId = destId;
+    } else if (
+      type === transactionsSchema.TransactionType.TRANSFER &&
+      destinationAccountId !== null
+    ) {
+      const destId = destinationAccountId;
 
       const accounts = await tsx.accounts.findMany({
         where: {
@@ -259,14 +347,16 @@ export async function edit(
       if (!debited.count) throw new InsufficientFundsError();
     }
 
+    await assertNonNegativeBalances(tsx, touchedAccountIds);
+
     const { count: updateCount } = await tsx.transactions.updateMany({
       where: {
         id: transactionId,
         version: existingTransaction.version,
       },
       data: {
-        type: payload.type,
-        account_id: payload.accountId,
+        type,
+        account_id: accountId,
         amount,
         destination_account_id: destinationAccountId,
         ...(payload.description !== undefined && {
@@ -288,50 +378,25 @@ export async function edit(
   return transaction;
 }
 
+// Undoes a transaction's balance effect without balance guards: an intermediate
+// negative balance is fine, callers check the final state afterwards.
 async function revertTransactionEffect(
   tsx: Prisma.TransactionClient,
   existingTransaction: transactionsSchema.Transaction,
 ) {
-  if (existingTransaction.type === transactionsSchema.TransactionType.INCOME) {
-    const { count } = await debit(
-      tsx,
-      existingTransaction.user_id,
-      existingTransaction.account_id,
-      existingTransaction.amount,
-    );
+  const { type, user_id, account_id, destination_account_id, amount } =
+    existingTransaction;
 
-    if (!count) throw new InsufficientFundsError();
+  if (type === transactionsSchema.TransactionType.INCOME) {
+    await withdraw(tsx, user_id, account_id, amount);
+  } else if (type === transactionsSchema.TransactionType.EXPENSE) {
+    await credit(tsx, user_id, account_id, amount);
   } else if (
-    existingTransaction.type === transactionsSchema.TransactionType.EXPENSE
+    type === transactionsSchema.TransactionType.TRANSFER &&
+    destination_account_id !== null
   ) {
-    await credit(
-      tsx,
-      existingTransaction.user_id,
-      existingTransaction.account_id,
-      existingTransaction.amount,
-    );
-  } else if (
-    existingTransaction.type === transactionsSchema.TransactionType.TRANSFER &&
-    existingTransaction.destination_account_id !== null
-  ) {
-    const {
-      account_id: sourceId,
-      destination_account_id: destId,
-      user_id,
-      amount,
-    } = existingTransaction;
-
-    let debitResult: { count: number };
-
-    if (destId < sourceId) {
-      debitResult = await debit(tsx, user_id, destId, amount);
-      await credit(tsx, user_id, sourceId, amount);
-    } else {
-      await credit(tsx, user_id, sourceId, amount);
-      debitResult = await debit(tsx, user_id, destId, amount);
-    }
-
-    if (!debitResult.count) throw new InsufficientFundsError();
+    await withdraw(tsx, user_id, destination_account_id, amount);
+    await credit(tsx, user_id, account_id, amount);
   }
 }
 
@@ -367,7 +432,15 @@ export async function deleteTransactionById(
       throw err;
     }
 
+    const touchedAccountIds = [
+      deletedTransaction.account_id,
+      deletedTransaction.destination_account_id,
+    ];
+
+    await lockAccounts(tsx, touchedAccountIds);
     await revertTransactionEffect(tsx, deletedTransaction);
+    // Deleting an income whose money was already spent would overdraw the account.
+    await assertNonNegativeBalances(tsx, touchedAccountIds);
   });
 }
 
