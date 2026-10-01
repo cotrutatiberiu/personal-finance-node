@@ -10,19 +10,19 @@ datasource db {
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 /// This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
 model accounts {
-  id           Int               @id @default(autoincrement())
-  user_id      Int
-  account_type account_type_enum
-  currency_id  Int
-  name         String            @db.VarChar(20)
-  archived     Boolean           @default(false)
-  balance      Decimal           @default(0) @db.Decimal(19, 4)
-  created_at   DateTime          @default(now()) @db.Timestamptz(6)
-  updated_at   DateTime          @default(now()) @db.Timestamptz(6)
-  currencies   currencies        @relation(fields: [currency_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
-  users        users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  transactions transactions[] @relation("TransactionSourceAccount")
-  incoming_transfers transactions[] @relation("TransactionDestinationAccount")
+  id                 Int               @id @default(autoincrement())
+  user_id            Int
+  account_type       account_type_enum
+  currency_id        Int
+  name               String            @db.VarChar(20)
+  archived           Boolean           @default(false)
+  balance            Decimal           @default(0) @db.Decimal(19, 4)
+  created_at         DateTime          @default(now()) @db.Timestamptz(6)
+  updated_at         DateTime          @default(now()) @db.Timestamptz(6)
+  currencies         currencies        @relation(fields: [currency_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
+  users              users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  transactions       transactions[]    @relation("TransactionSourceAccount")
+  incoming_transfers transactions[]    @relation("TransactionDestinationAccount")
 
   @@index([currency_id], map: "idx_accounts_currency_id")
   @@index([user_id], map: "idx_accounts_user_id")
@@ -60,22 +60,23 @@ model roles {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model transactions {
-  id          Int        @id @default(autoincrement())
-  amount      Decimal    @db.Decimal(19, 4)
-  description String?    @db.VarChar(255)
-  type        String     @db.VarChar(20)
-  user_id     Int
-  account_id  Int
-  category_id Int
+  id                     Int                @id @default(autoincrement())
+  amount                 Decimal            @db.Decimal(19, 4)
+  description            String?            @db.VarChar(255)
+  type                   String             @db.VarChar(20)
+  user_id                Int
+  account_id             Int
+  category_id            Int
   destination_account_id Int?
-  occurred_at      DateTime   @db.Timestamptz(6)
-  updated_at       DateTime   @default(now()) @db.Timestamptz(6)
-  idempotency_key  String?    @db.Uuid
-  version          Int        @default(0)
-  accounts         accounts   @relation("TransactionSourceAccount", fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  destination_account accounts? @relation("TransactionDestinationAccount", fields: [destination_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  categories       categories @relation(fields: [category_id], references: [id], onUpdate: NoAction)
-  users            users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  occurred_at            DateTime           @db.Timestamptz(6)
+  updated_at             DateTime           @default(now()) @db.Timestamptz(6)
+  idempotency_key        String?            @db.Uuid
+  version                Int                @default(0)
+  accounts               accounts           @relation("TransactionSourceAccount", fields: [account_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  destination_account    accounts?          @relation("TransactionDestinationAccount", fields: [destination_account_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  categories             categories         @relation(fields: [category_id], references: [id], onUpdate: NoAction)
+  users                  users              @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  transaction_tags        transaction_tags[]
 
   @@unique([user_id, idempotency_key])
   @@index([destination_account_id], map: "idx_tx_destination_account")
@@ -96,6 +97,7 @@ model users {
   accounts     accounts[]
   categories   categories[]
   transactions transactions[]
+  tags         tags[]
   roles        roles          @relation(fields: [role_id], references: [id], onUpdate: NoAction)
 }
 
@@ -104,4 +106,30 @@ enum account_type_enum {
   CARD
   BANK
   SAVINGS
+}
+
+model tags {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  name       String   @db.VarChar(50)
+  created_at DateTime @default(now()) @db.Timestamptz(6)
+  updated_at DateTime @default(now()) @db.Timestamptz(6)
+
+  users users @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  transaction_tags transaction_tags[]
+
+  @@index([user_id], map: "idx_tags_user_id")
+}
+
+model transaction_tags {
+  transaction_id Int
+  tag_id         Int
+  applied_at     DateTime @default(now()) @db.Timestamptz(6)
+
+  transactions transactions @relation(fields: [transaction_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  tags         tags         @relation(fields: [tag_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@id([transaction_id, tag_id])
+  @@index([tag_id], map: "idx_transaction_tags_tag_id")
 }

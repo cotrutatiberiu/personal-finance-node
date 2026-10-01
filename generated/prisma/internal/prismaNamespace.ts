@@ -402,7 +402,9 @@ export const ModelName = {
   currencies: 'currencies',
   roles: 'roles',
   transactions: 'transactions',
-  users: 'users'
+  users: 'users',
+  tags: 'tags',
+  transaction_tags: 'transaction_tags'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -418,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "accounts" | "categories" | "currencies" | "roles" | "transactions" | "users"
+    modelProps: "accounts" | "categories" | "currencies" | "roles" | "transactions" | "users" | "tags" | "transaction_tags"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -866,6 +868,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    tags: {
+      payload: Prisma.$tagsPayload<ExtArgs>
+      fields: Prisma.tagsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.tagsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.tagsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>
+        }
+        findFirst: {
+          args: Prisma.tagsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.tagsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>
+        }
+        findMany: {
+          args: Prisma.tagsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>[]
+        }
+        create: {
+          args: Prisma.tagsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>
+        }
+        createMany: {
+          args: Prisma.tagsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.tagsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>[]
+        }
+        delete: {
+          args: Prisma.tagsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>
+        }
+        update: {
+          args: Prisma.tagsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>
+        }
+        deleteMany: {
+          args: Prisma.tagsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.tagsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.tagsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>[]
+        }
+        upsert: {
+          args: Prisma.tagsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$tagsPayload>
+        }
+        aggregate: {
+          args: Prisma.TagsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTags>
+        }
+        groupBy: {
+          args: Prisma.tagsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TagsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.tagsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TagsCountAggregateOutputType> | number
+        }
+      }
+    }
+    transaction_tags: {
+      payload: Prisma.$transaction_tagsPayload<ExtArgs>
+      fields: Prisma.transaction_tagsFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.transaction_tagsFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.transaction_tagsFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>
+        }
+        findFirst: {
+          args: Prisma.transaction_tagsFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.transaction_tagsFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>
+        }
+        findMany: {
+          args: Prisma.transaction_tagsFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>[]
+        }
+        create: {
+          args: Prisma.transaction_tagsCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>
+        }
+        createMany: {
+          args: Prisma.transaction_tagsCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.transaction_tagsCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>[]
+        }
+        delete: {
+          args: Prisma.transaction_tagsDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>
+        }
+        update: {
+          args: Prisma.transaction_tagsUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>
+        }
+        deleteMany: {
+          args: Prisma.transaction_tagsDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.transaction_tagsUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.transaction_tagsUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>[]
+        }
+        upsert: {
+          args: Prisma.transaction_tagsUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$transaction_tagsPayload>
+        }
+        aggregate: {
+          args: Prisma.Transaction_tagsAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTransaction_tags>
+        }
+        groupBy: {
+          args: Prisma.transaction_tagsGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Transaction_tagsGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.transaction_tagsCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.Transaction_tagsCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -978,6 +1128,26 @@ export const UsersScalarFieldEnum = {
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const TagsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  name: 'name',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type TagsScalarFieldEnum = (typeof TagsScalarFieldEnum)[keyof typeof TagsScalarFieldEnum]
+
+
+export const Transaction_tagsScalarFieldEnum = {
+  transaction_id: 'transaction_id',
+  tag_id: 'tag_id',
+  applied_at: 'applied_at'
+} as const
+
+export type Transaction_tagsScalarFieldEnum = (typeof Transaction_tagsScalarFieldEnum)[keyof typeof Transaction_tagsScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1257,6 +1427,8 @@ export type GlobalOmitConfig = {
   roles?: Prisma.rolesOmit
   transactions?: Prisma.transactionsOmit
   users?: Prisma.usersOmit
+  tags?: Prisma.tagsOmit
+  transaction_tags?: Prisma.transaction_tagsOmit
 }
 
 /* Types for Logging */

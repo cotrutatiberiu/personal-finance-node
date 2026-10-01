@@ -28,6 +28,11 @@ const amountSchema = decimalSchema.refine(
 
 const utcDateSchema = z.iso.datetime().transform((val) => new Date(val));
 
+const tagIdsSchema = z
+  .array(z.number().int().positive())
+  .max(20, "A transaction can have at most 20 tags")
+  .transform((ids) => [...new Set(ids)]);
+
 export const createTransactionSchema = z
   .object({
     amount: amountSchema,
@@ -36,6 +41,7 @@ export const createTransactionSchema = z
     accountId: z.number().int().positive(),
     categoryId: z.number().int().positive(),
     destinationAccountId: z.number().int().positive().optional(),
+    tagIds: tagIdsSchema.optional(),
   })
   .superRefine((val, ctx) => {
     if (val.type === TransactionType.TRANSFER) {
@@ -79,6 +85,7 @@ export const editTransactionSchema = z
     accountId: z.number().int().positive().optional(),
     categoryId: z.number().int().positive().optional(),
     destinationAccountId: z.number().int().positive().optional(),
+    tagIds: tagIdsSchema.optional(),
   })
   .refine(
     (val) => Object.keys(val).length > 0,
@@ -101,6 +108,10 @@ export const transactionRelations = {
   accounts: summary,
   destination_account: summary,
   categories: summary,
+  transaction_tags: {
+    select: { tags: summary },
+    orderBy: { tags: { name: "asc" } },
+  },
 } satisfies Prisma.transactionsInclude;
 
 export type TransactionWithRelations = Prisma.transactionsGetPayload<{
@@ -116,6 +127,7 @@ export const getTransactionsQuerySchema = paginationQuerySchema
     type: z.enum(TransactionType).optional(),
     accountId: z.coerce.number().int().positive().optional(),
     categoryId: z.coerce.number().int().positive().optional(),
+    tagId: z.coerce.number().int().positive().optional(),
     minAmount: decimalSchema.optional(),
     maxAmount: decimalSchema.optional(),
   })

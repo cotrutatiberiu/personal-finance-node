@@ -73,3 +73,13 @@ export type transactions = Prisma.transactionsModel
  * This model contains an expression index which requires additional setup for migrations. Visit https://pris.ly/d/expression-indexes for more info.
  */
 export type users = Prisma.usersModel
+/**
+ * Model tags
+ * 
+ */
+export type tags = Prisma.tagsModel
+/**
+ * Model transaction_tags
+ * 
+ */
+export type transaction_tags = Prisma.transaction_tagsModel

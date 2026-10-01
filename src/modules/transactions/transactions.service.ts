@@ -58,6 +58,25 @@ async function lockAccounts(
   await tsx.$queryRaw`SELECT id FROM accounts WHERE id IN (${Prisma.join(ids)}) ORDER BY id FOR UPDATE`;
 }
 
+async function assertTagsOwned(userId: number, tagIds: number[] | undefined) {
+  if (!tagIds?.length) return;
+
+  const owned = await prisma.tags.count({
+    where: { id: { in: tagIds }, user_id: userId },
+  });
+
+  if (owned !== tagIds.length) throw new ResourceNotFound("Tag");
+}
+
+// Flattens the join rows: transaction_tags: [{ tags: { id, name } }] -> tags: [{ id, name }].
+const toDto = ({
+  transaction_tags,
+  ...transaction
+}: transactionsSchema.TransactionWithRelations) => ({
+  ...transaction,
+  tags: transaction_tags.map((link) => link.tags),
+});
+
 // The invariant is "no account ends negative", not "no step dips negative".
 async function assertNonNegativeBalances(
   tsx: Prisma.TransactionClient,
@@ -80,12 +99,13 @@ export async function create(
   const findByIdempotencyKey = (key: string) =>
     prisma.transactions.findFirst({
       where: { user_id: userDetails.id, idempotency_key: key },
+      include: transactionsSchema.transactionRelations,
     });
 
   if (idempotencyKey) {
     const existing = await findByIdempotencyKey(idempotencyKey);
 
-    if (existing) return existing;
+    if (existing) return toDto(existing);
   }
 
   const userExists = await prisma.users.count({
@@ -99,6 +119,8 @@ export async function create(
   });
 
   if (!categoryExists) throw new ResourceNotFound("Category");
+
+  await assertTagsOwned(userDetails.id, payload.tagIds);
 
   try {
     return await prisma.$transaction(async (tsx) => {
@@ -181,7 +203,7 @@ export async function create(
       }
 
       const occurredAt = new Date();
-      return await tsx.transactions.create({
+      const transaction = await tsx.transactions.create({
         data: {
           amount: payload.amount,
           description: payload.description || null,
@@ -192,8 +214,14 @@ export async function create(
           destination_account_id: payload.destinationAccountId ?? null,
           occurred_at: occurredAt,
           idempotency_key: idempotencyKey ?? null,
+          transaction_tags: {
+            create: (payload.tagIds ?? []).map((tag_id) => ({ tag_id })),
+          },
         },
+        include: transactionsSchema.transactionRelations,
       });
+
+      return toDto(transaction);
     });
   } catch (err) {
     // Two requests with the same key both missed the fast path; the unique index on
@@ -206,7 +234,7 @@ export async function create(
     ) {
       const existing = await findByIdempotencyKey(idempotencyKey);
 
-      if (existing) return existing;
+      if (existing) return toDto(existing);
     }
 
     throw err;
@@ -231,6 +259,8 @@ export async function edit(
 
     if (!categoryExists) throw new ResourceNotFound("Category");
   }
+
+  await assertTagsOwned(userDetails.id, payload.tagIds);
 
   const existingTransaction = await prisma.transactions.findFirst({
     where: {
@@ -369,12 +399,26 @@ export async function edit(
 
     if (!updateCount) throw new OptimisticLockError("Transaction");
 
+    // Diff instead of delete-all-and-reinsert: links that stay keep their applied_at.
+    const { tagIds } = payload;
+    if (tagIds !== undefined) {
+      await tsx.transaction_tags.deleteMany({
+        where: { transaction_id: transactionId, tag_id: { notIn: tagIds } },
+      });
+
+      await tsx.transaction_tags.createMany({
+        data: tagIds.map((tag_id) => ({ transaction_id: transactionId, tag_id })),
+        skipDuplicates: true, // ON CONFLICT DO NOTHING on the (transaction_id, tag_id) primary key
+      });
+    }
+
     return tsx.transactions.findUniqueOrThrow({
       where: { id: transactionId },
+      include: transactionsSchema.transactionRelations,
     });
   });
 
-  return transaction;
+  return toDto(transaction);
 }
 
 // Undoes a transaction's balance effect without balance guards: an intermediate
@@ -407,7 +451,7 @@ export async function getTransactionById(userDetails: UserDetails, id: number) {
 
   if (!transaction) throw new ResourceNotFound("Transaction");
 
-  return transaction;
+  return toDto(transaction);
 }
 
 export async function deleteTransactionById(
@@ -457,6 +501,7 @@ export async function getTransactions(
     type,
     accountId,
     categoryId,
+    tagId,
     minAmount,
     maxAmount,
   } = query;
@@ -465,6 +510,7 @@ export async function getTransactions(
     user_id: userDetails.id,
     ...(type && { type }),
     ...(categoryId && { category_id: categoryId }),
+    ...(tagId && { transaction_tags: { some: { tag_id: tagId } } }),
     ...(accountId && {
       OR: [{ account_id: accountId }, { destination_account_id: accountId }],
     }),
@@ -496,5 +542,5 @@ export async function getTransactions(
     { isolationLevel: Prisma.TransactionIsolationLevel.RepeatableRead },
   );
 
-  return toPaginatedResponse(transactions, total, page, pageSize);
+  return toPaginatedResponse(transactions.map(toDto), total, page, pageSize);
 }

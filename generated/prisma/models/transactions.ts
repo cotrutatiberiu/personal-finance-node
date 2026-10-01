@@ -300,6 +300,7 @@ export type transactionsWhereInput = {
   destination_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   categories?: Prisma.XOR<Prisma.CategoriesScalarRelationFilter, Prisma.categoriesWhereInput>
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
+  transaction_tags?: Prisma.Transaction_tagsListRelationFilter
 }
 
 export type transactionsOrderByWithRelationInput = {
@@ -319,6 +320,7 @@ export type transactionsOrderByWithRelationInput = {
   destination_account?: Prisma.accountsOrderByWithRelationInput
   categories?: Prisma.categoriesOrderByWithRelationInput
   users?: Prisma.usersOrderByWithRelationInput
+  transaction_tags?: Prisma.transaction_tagsOrderByRelationAggregateInput
 }
 
 export type transactionsWhereUniqueInput = Prisma.AtLeast<{
@@ -342,6 +344,7 @@ export type transactionsWhereUniqueInput = Prisma.AtLeast<{
   destination_account?: Prisma.XOR<Prisma.AccountsNullableScalarRelationFilter, Prisma.accountsWhereInput> | null
   categories?: Prisma.XOR<Prisma.CategoriesScalarRelationFilter, Prisma.categoriesWhereInput>
   users?: Prisma.XOR<Prisma.UsersScalarRelationFilter, Prisma.usersWhereInput>
+  transaction_tags?: Prisma.Transaction_tagsListRelationFilter
 }, "id" | "user_id_idempotency_key">
 
 export type transactionsOrderByWithAggregationInput = {
@@ -394,6 +397,7 @@ export type transactionsCreateInput = {
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
+  transaction_tags?: Prisma.transaction_tagsCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsUncheckedCreateInput = {
@@ -409,6 +413,7 @@ export type transactionsUncheckedCreateInput = {
   updated_at?: Date | string
   idempotency_key?: string | null
   version?: number
+  transaction_tags?: Prisma.transaction_tagsUncheckedCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsUpdateInput = {
@@ -423,6 +428,7 @@ export type transactionsUpdateInput = {
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
+  transaction_tags?: Prisma.transaction_tagsUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateInput = {
@@ -438,6 +444,7 @@ export type transactionsUncheckedUpdateInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  transaction_tags?: Prisma.transaction_tagsUncheckedUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsCreateManyInput = {
@@ -558,6 +565,11 @@ export type transactionsSumOrderByAggregateInput = {
   category_id?: Prisma.SortOrder
   destination_account_id?: Prisma.SortOrder
   version?: Prisma.SortOrder
+}
+
+export type TransactionsScalarRelationFilter = {
+  is?: Prisma.transactionsWhereInput
+  isNot?: Prisma.transactionsWhereInput
 }
 
 export type transactionsCreateNestedManyWithoutAccountsInput = {
@@ -732,6 +744,20 @@ export type transactionsUncheckedUpdateManyWithoutUsersNestedInput = {
   deleteMany?: Prisma.transactionsScalarWhereInput | Prisma.transactionsScalarWhereInput[]
 }
 
+export type transactionsCreateNestedOneWithoutTransaction_tagsInput = {
+  create?: Prisma.XOR<Prisma.transactionsCreateWithoutTransaction_tagsInput, Prisma.transactionsUncheckedCreateWithoutTransaction_tagsInput>
+  connectOrCreate?: Prisma.transactionsCreateOrConnectWithoutTransaction_tagsInput
+  connect?: Prisma.transactionsWhereUniqueInput
+}
+
+export type transactionsUpdateOneRequiredWithoutTransaction_tagsNestedInput = {
+  create?: Prisma.XOR<Prisma.transactionsCreateWithoutTransaction_tagsInput, Prisma.transactionsUncheckedCreateWithoutTransaction_tagsInput>
+  connectOrCreate?: Prisma.transactionsCreateOrConnectWithoutTransaction_tagsInput
+  upsert?: Prisma.transactionsUpsertWithoutTransaction_tagsInput
+  connect?: Prisma.transactionsWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.transactionsUpdateToOneWithWhereWithoutTransaction_tagsInput, Prisma.transactionsUpdateWithoutTransaction_tagsInput>, Prisma.transactionsUncheckedUpdateWithoutTransaction_tagsInput>
+}
+
 export type transactionsCreateWithoutAccountsInput = {
   amount: runtime.Decimal | runtime.DecimalJsLike | number | string
   description?: string | null
@@ -743,6 +769,7 @@ export type transactionsCreateWithoutAccountsInput = {
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
+  transaction_tags?: Prisma.transaction_tagsCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsUncheckedCreateWithoutAccountsInput = {
@@ -757,6 +784,7 @@ export type transactionsUncheckedCreateWithoutAccountsInput = {
   updated_at?: Date | string
   idempotency_key?: string | null
   version?: number
+  transaction_tags?: Prisma.transaction_tagsUncheckedCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsCreateOrConnectWithoutAccountsInput = {
@@ -780,6 +808,7 @@ export type transactionsCreateWithoutDestination_accountInput = {
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
+  transaction_tags?: Prisma.transaction_tagsCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsUncheckedCreateWithoutDestination_accountInput = {
@@ -794,6 +823,7 @@ export type transactionsUncheckedCreateWithoutDestination_accountInput = {
   updated_at?: Date | string
   idempotency_key?: string | null
   version?: number
+  transaction_tags?: Prisma.transaction_tagsUncheckedCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsCreateOrConnectWithoutDestination_accountInput = {
@@ -867,6 +897,7 @@ export type transactionsCreateWithoutCategoriesInput = {
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   users: Prisma.usersCreateNestedOneWithoutTransactionsInput
+  transaction_tags?: Prisma.transaction_tagsCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsUncheckedCreateWithoutCategoriesInput = {
@@ -881,6 +912,7 @@ export type transactionsUncheckedCreateWithoutCategoriesInput = {
   updated_at?: Date | string
   idempotency_key?: string | null
   version?: number
+  transaction_tags?: Prisma.transaction_tagsUncheckedCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsCreateOrConnectWithoutCategoriesInput = {
@@ -920,6 +952,7 @@ export type transactionsCreateWithoutUsersInput = {
   accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
   destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
   categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
+  transaction_tags?: Prisma.transaction_tagsCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsUncheckedCreateWithoutUsersInput = {
@@ -934,6 +967,7 @@ export type transactionsUncheckedCreateWithoutUsersInput = {
   updated_at?: Date | string
   idempotency_key?: string | null
   version?: number
+  transaction_tags?: Prisma.transaction_tagsUncheckedCreateNestedManyWithoutTransactionsInput
 }
 
 export type transactionsCreateOrConnectWithoutUsersInput = {
@@ -960,6 +994,80 @@ export type transactionsUpdateWithWhereUniqueWithoutUsersInput = {
 export type transactionsUpdateManyWithWhereWithoutUsersInput = {
   where: Prisma.transactionsScalarWhereInput
   data: Prisma.XOR<Prisma.transactionsUpdateManyMutationInput, Prisma.transactionsUncheckedUpdateManyWithoutUsersInput>
+}
+
+export type transactionsCreateWithoutTransaction_tagsInput = {
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: string | null
+  type: string
+  occurred_at: Date | string
+  updated_at?: Date | string
+  idempotency_key?: string | null
+  version?: number
+  accounts: Prisma.accountsCreateNestedOneWithoutTransactionsInput
+  destination_account?: Prisma.accountsCreateNestedOneWithoutIncoming_transfersInput
+  categories: Prisma.categoriesCreateNestedOneWithoutTransactionsInput
+  users: Prisma.usersCreateNestedOneWithoutTransactionsInput
+}
+
+export type transactionsUncheckedCreateWithoutTransaction_tagsInput = {
+  id?: number
+  amount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: string | null
+  type: string
+  user_id: number
+  account_id: number
+  category_id: number
+  destination_account_id?: number | null
+  occurred_at: Date | string
+  updated_at?: Date | string
+  idempotency_key?: string | null
+  version?: number
+}
+
+export type transactionsCreateOrConnectWithoutTransaction_tagsInput = {
+  where: Prisma.transactionsWhereUniqueInput
+  create: Prisma.XOR<Prisma.transactionsCreateWithoutTransaction_tagsInput, Prisma.transactionsUncheckedCreateWithoutTransaction_tagsInput>
+}
+
+export type transactionsUpsertWithoutTransaction_tagsInput = {
+  update: Prisma.XOR<Prisma.transactionsUpdateWithoutTransaction_tagsInput, Prisma.transactionsUncheckedUpdateWithoutTransaction_tagsInput>
+  create: Prisma.XOR<Prisma.transactionsCreateWithoutTransaction_tagsInput, Prisma.transactionsUncheckedCreateWithoutTransaction_tagsInput>
+  where?: Prisma.transactionsWhereInput
+}
+
+export type transactionsUpdateToOneWithWhereWithoutTransaction_tagsInput = {
+  where?: Prisma.transactionsWhereInput
+  data: Prisma.XOR<Prisma.transactionsUpdateWithoutTransaction_tagsInput, Prisma.transactionsUncheckedUpdateWithoutTransaction_tagsInput>
+}
+
+export type transactionsUpdateWithoutTransaction_tagsInput = {
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
+  destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
+  categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
+  users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
+}
+
+export type transactionsUncheckedUpdateWithoutTransaction_tagsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  amount?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  user_id?: Prisma.IntFieldUpdateOperationsInput | number
+  account_id?: Prisma.IntFieldUpdateOperationsInput | number
+  category_id?: Prisma.IntFieldUpdateOperationsInput | number
+  destination_account_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  occurred_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
 export type transactionsCreateManyAccountsInput = {
@@ -1001,6 +1109,7 @@ export type transactionsUpdateWithoutAccountsInput = {
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
+  transaction_tags?: Prisma.transaction_tagsUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateWithoutAccountsInput = {
@@ -1015,6 +1124,7 @@ export type transactionsUncheckedUpdateWithoutAccountsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  transaction_tags?: Prisma.transaction_tagsUncheckedUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateManyWithoutAccountsInput = {
@@ -1042,6 +1152,7 @@ export type transactionsUpdateWithoutDestination_accountInput = {
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
+  transaction_tags?: Prisma.transaction_tagsUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateWithoutDestination_accountInput = {
@@ -1056,6 +1167,7 @@ export type transactionsUncheckedUpdateWithoutDestination_accountInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  transaction_tags?: Prisma.transaction_tagsUncheckedUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateManyWithoutDestination_accountInput = {
@@ -1097,6 +1209,7 @@ export type transactionsUpdateWithoutCategoriesInput = {
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   users?: Prisma.usersUpdateOneRequiredWithoutTransactionsNestedInput
+  transaction_tags?: Prisma.transaction_tagsUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateWithoutCategoriesInput = {
@@ -1111,6 +1224,7 @@ export type transactionsUncheckedUpdateWithoutCategoriesInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  transaction_tags?: Prisma.transaction_tagsUncheckedUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateManyWithoutCategoriesInput = {
@@ -1152,6 +1266,7 @@ export type transactionsUpdateWithoutUsersInput = {
   accounts?: Prisma.accountsUpdateOneRequiredWithoutTransactionsNestedInput
   destination_account?: Prisma.accountsUpdateOneWithoutIncoming_transfersNestedInput
   categories?: Prisma.categoriesUpdateOneRequiredWithoutTransactionsNestedInput
+  transaction_tags?: Prisma.transaction_tagsUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateWithoutUsersInput = {
@@ -1166,6 +1281,7 @@ export type transactionsUncheckedUpdateWithoutUsersInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   idempotency_key?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
+  transaction_tags?: Prisma.transaction_tagsUncheckedUpdateManyWithoutTransactionsNestedInput
 }
 
 export type transactionsUncheckedUpdateManyWithoutUsersInput = {
@@ -1182,6 +1298,35 @@ export type transactionsUncheckedUpdateManyWithoutUsersInput = {
   version?: Prisma.IntFieldUpdateOperationsInput | number
 }
 
+
+/**
+ * Count Type TransactionsCountOutputType
+ */
+
+export type TransactionsCountOutputType = {
+  transaction_tags: number
+}
+
+export type TransactionsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  transaction_tags?: boolean | TransactionsCountOutputTypeCountTransaction_tagsArgs
+}
+
+/**
+ * TransactionsCountOutputType without action
+ */
+export type TransactionsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TransactionsCountOutputType
+   */
+  select?: Prisma.TransactionsCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * TransactionsCountOutputType without action
+ */
+export type TransactionsCountOutputTypeCountTransaction_tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.transaction_tagsWhereInput
+}
 
 
 export type transactionsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1201,6 +1346,8 @@ export type transactionsSelect<ExtArgs extends runtime.Types.Extensions.Internal
   destination_account?: boolean | Prisma.transactions$destination_accountArgs<ExtArgs>
   categories?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
+  transaction_tags?: boolean | Prisma.transactions$transaction_tagsArgs<ExtArgs>
+  _count?: boolean | Prisma.TransactionsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["transactions"]>
 
 export type transactionsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1262,6 +1409,8 @@ export type transactionsInclude<ExtArgs extends runtime.Types.Extensions.Interna
   destination_account?: boolean | Prisma.transactions$destination_accountArgs<ExtArgs>
   categories?: boolean | Prisma.categoriesDefaultArgs<ExtArgs>
   users?: boolean | Prisma.usersDefaultArgs<ExtArgs>
+  transaction_tags?: boolean | Prisma.transactions$transaction_tagsArgs<ExtArgs>
+  _count?: boolean | Prisma.TransactionsCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type transactionsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | Prisma.accountsDefaultArgs<ExtArgs>
@@ -1283,6 +1432,7 @@ export type $transactionsPayload<ExtArgs extends runtime.Types.Extensions.Intern
     destination_account: Prisma.$accountsPayload<ExtArgs> | null
     categories: Prisma.$categoriesPayload<ExtArgs>
     users: Prisma.$usersPayload<ExtArgs>
+    transaction_tags: Prisma.$transaction_tagsPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1695,6 +1845,7 @@ export interface Prisma__transactionsClient<T, Null = never, ExtArgs extends run
   destination_account<T extends Prisma.transactions$destination_accountArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$destination_accountArgs<ExtArgs>>): Prisma.Prisma__accountsClient<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   categories<T extends Prisma.categoriesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.categoriesDefaultArgs<ExtArgs>>): Prisma.Prisma__categoriesClient<runtime.Types.Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   users<T extends Prisma.usersDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.usersDefaultArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  transaction_tags<T extends Prisma.transactions$transaction_tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.transactions$transaction_tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transaction_tagsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2153,6 +2304,30 @@ export type transactions$destination_accountArgs<ExtArgs extends runtime.Types.E
    */
   include?: Prisma.accountsInclude<ExtArgs> | null
   where?: Prisma.accountsWhereInput
+}
+
+/**
+ * transactions.transaction_tags
+ */
+export type transactions$transaction_tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the transaction_tags
+   */
+  select?: Prisma.transaction_tagsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the transaction_tags
+   */
+  omit?: Prisma.transaction_tagsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.transaction_tagsInclude<ExtArgs> | null
+  where?: Prisma.transaction_tagsWhereInput
+  orderBy?: Prisma.transaction_tagsOrderByWithRelationInput | Prisma.transaction_tagsOrderByWithRelationInput[]
+  cursor?: Prisma.transaction_tagsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.Transaction_tagsScalarFieldEnum | Prisma.Transaction_tagsScalarFieldEnum[]
 }
 
 /**

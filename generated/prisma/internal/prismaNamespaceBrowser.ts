@@ -56,7 +56,9 @@ export const ModelName = {
   currencies: 'currencies',
   roles: 'roles',
   transactions: 'transactions',
-  users: 'users'
+  users: 'users',
+  tags: 'tags',
+  transaction_tags: 'transaction_tags'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -148,6 +150,26 @@ export const UsersScalarFieldEnum = {
 } as const
 
 export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
+
+
+export const TagsScalarFieldEnum = {
+  id: 'id',
+  user_id: 'user_id',
+  name: 'name',
+  created_at: 'created_at',
+  updated_at: 'updated_at'
+} as const
+
+export type TagsScalarFieldEnum = (typeof TagsScalarFieldEnum)[keyof typeof TagsScalarFieldEnum]
+
+
+export const Transaction_tagsScalarFieldEnum = {
+  transaction_id: 'transaction_id',
+  tag_id: 'tag_id',
+  applied_at: 'applied_at'
+} as const
+
+export type Transaction_tagsScalarFieldEnum = (typeof Transaction_tagsScalarFieldEnum)[keyof typeof Transaction_tagsScalarFieldEnum]
 
 
 export const SortOrder = {

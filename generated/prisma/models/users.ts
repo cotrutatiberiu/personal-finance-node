@@ -247,6 +247,7 @@ export type usersWhereInput = {
   accounts?: Prisma.AccountsListRelationFilter
   categories?: Prisma.CategoriesListRelationFilter
   transactions?: Prisma.TransactionsListRelationFilter
+  tags?: Prisma.TagsListRelationFilter
   roles?: Prisma.XOR<Prisma.RolesScalarRelationFilter, Prisma.rolesWhereInput>
 }
 
@@ -262,6 +263,7 @@ export type usersOrderByWithRelationInput = {
   accounts?: Prisma.accountsOrderByRelationAggregateInput
   categories?: Prisma.categoriesOrderByRelationAggregateInput
   transactions?: Prisma.transactionsOrderByRelationAggregateInput
+  tags?: Prisma.tagsOrderByRelationAggregateInput
   roles?: Prisma.rolesOrderByWithRelationInput
 }
 
@@ -280,6 +282,7 @@ export type usersWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountsListRelationFilter
   categories?: Prisma.CategoriesListRelationFilter
   transactions?: Prisma.TransactionsListRelationFilter
+  tags?: Prisma.TagsListRelationFilter
   roles?: Prisma.XOR<Prisma.RolesScalarRelationFilter, Prisma.rolesWhereInput>
 }, "id">
 
@@ -323,6 +326,7 @@ export type usersCreateInput = {
   accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
   categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsCreateNestedManyWithoutUsersInput
   roles: Prisma.rolesCreateNestedOneWithoutUsersInput
 }
 
@@ -338,6 +342,7 @@ export type usersUncheckedCreateInput = {
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
   categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersUpdateInput = {
@@ -350,6 +355,7 @@ export type usersUpdateInput = {
   accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
   categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUpdateManyWithoutUsersNestedInput
   roles?: Prisma.rolesUpdateOneRequiredWithoutUsersNestedInput
 }
 
@@ -365,6 +371,7 @@ export type usersUncheckedUpdateInput = {
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
   categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateManyInput = {
@@ -540,6 +547,20 @@ export type usersUpdateOneRequiredWithoutTransactionsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTransactionsInput, Prisma.usersUpdateWithoutTransactionsInput>, Prisma.usersUncheckedUpdateWithoutTransactionsInput>
 }
 
+export type usersCreateNestedOneWithoutTagsInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutTagsInput, Prisma.usersUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutTagsInput
+  connect?: Prisma.usersWhereUniqueInput
+}
+
+export type usersUpdateOneRequiredWithoutTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.usersCreateWithoutTagsInput, Prisma.usersUncheckedCreateWithoutTagsInput>
+  connectOrCreate?: Prisma.usersCreateOrConnectWithoutTagsInput
+  upsert?: Prisma.usersUpsertWithoutTagsInput
+  connect?: Prisma.usersWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.usersUpdateToOneWithWhereWithoutTagsInput, Prisma.usersUpdateWithoutTagsInput>, Prisma.usersUncheckedUpdateWithoutTagsInput>
+}
+
 export type usersCreateWithoutAccountsInput = {
   first_name: string
   last_name: string
@@ -549,6 +570,7 @@ export type usersCreateWithoutAccountsInput = {
   updated_at?: Date | string
   categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsCreateNestedManyWithoutUsersInput
   roles: Prisma.rolesCreateNestedOneWithoutUsersInput
 }
 
@@ -563,6 +585,7 @@ export type usersUncheckedCreateWithoutAccountsInput = {
   updated_at?: Date | string
   categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutAccountsInput = {
@@ -590,6 +613,7 @@ export type usersUpdateWithoutAccountsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUpdateManyWithoutUsersNestedInput
   roles?: Prisma.rolesUpdateOneRequiredWithoutUsersNestedInput
 }
 
@@ -604,6 +628,7 @@ export type usersUncheckedUpdateWithoutAccountsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutCategoriesInput = {
@@ -615,6 +640,7 @@ export type usersCreateWithoutCategoriesInput = {
   updated_at?: Date | string
   accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsCreateNestedManyWithoutUsersInput
   roles: Prisma.rolesCreateNestedOneWithoutUsersInput
 }
 
@@ -629,6 +655,7 @@ export type usersUncheckedCreateWithoutCategoriesInput = {
   updated_at?: Date | string
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutCategoriesInput = {
@@ -656,6 +683,7 @@ export type usersUpdateWithoutCategoriesInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUpdateManyWithoutUsersNestedInput
   roles?: Prisma.rolesUpdateOneRequiredWithoutUsersNestedInput
 }
 
@@ -670,6 +698,7 @@ export type usersUncheckedUpdateWithoutCategoriesInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateWithoutRolesInput = {
@@ -682,6 +711,7 @@ export type usersCreateWithoutRolesInput = {
   accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
   categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsCreateNestedManyWithoutUsersInput
 }
 
 export type usersUncheckedCreateWithoutRolesInput = {
@@ -695,6 +725,7 @@ export type usersUncheckedCreateWithoutRolesInput = {
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
   categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
   transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutRolesInput = {
@@ -746,6 +777,7 @@ export type usersCreateWithoutTransactionsInput = {
   updated_at?: Date | string
   accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
   categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsCreateNestedManyWithoutUsersInput
   roles: Prisma.rolesCreateNestedOneWithoutUsersInput
 }
 
@@ -760,6 +792,7 @@ export type usersUncheckedCreateWithoutTransactionsInput = {
   updated_at?: Date | string
   accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
   categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  tags?: Prisma.tagsUncheckedCreateNestedManyWithoutUsersInput
 }
 
 export type usersCreateOrConnectWithoutTransactionsInput = {
@@ -787,6 +820,7 @@ export type usersUpdateWithoutTransactionsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
   categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUpdateManyWithoutUsersNestedInput
   roles?: Prisma.rolesUpdateOneRequiredWithoutUsersNestedInput
 }
 
@@ -801,6 +835,77 @@ export type usersUncheckedUpdateWithoutTransactionsInput = {
   updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
   categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUncheckedUpdateManyWithoutUsersNestedInput
+}
+
+export type usersCreateWithoutTagsInput = {
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesCreateNestedManyWithoutUsersInput
+  transactions?: Prisma.transactionsCreateNestedManyWithoutUsersInput
+  roles: Prisma.rolesCreateNestedOneWithoutUsersInput
+}
+
+export type usersUncheckedCreateWithoutTagsInput = {
+  id?: number
+  first_name: string
+  last_name: string
+  email: string
+  password: string
+  role_id: number
+  created_at?: Date | string
+  updated_at?: Date | string
+  accounts?: Prisma.accountsUncheckedCreateNestedManyWithoutUsersInput
+  categories?: Prisma.categoriesUncheckedCreateNestedManyWithoutUsersInput
+  transactions?: Prisma.transactionsUncheckedCreateNestedManyWithoutUsersInput
+}
+
+export type usersCreateOrConnectWithoutTagsInput = {
+  where: Prisma.usersWhereUniqueInput
+  create: Prisma.XOR<Prisma.usersCreateWithoutTagsInput, Prisma.usersUncheckedCreateWithoutTagsInput>
+}
+
+export type usersUpsertWithoutTagsInput = {
+  update: Prisma.XOR<Prisma.usersUpdateWithoutTagsInput, Prisma.usersUncheckedUpdateWithoutTagsInput>
+  create: Prisma.XOR<Prisma.usersCreateWithoutTagsInput, Prisma.usersUncheckedCreateWithoutTagsInput>
+  where?: Prisma.usersWhereInput
+}
+
+export type usersUpdateToOneWithWhereWithoutTagsInput = {
+  where?: Prisma.usersWhereInput
+  data: Prisma.XOR<Prisma.usersUpdateWithoutTagsInput, Prisma.usersUncheckedUpdateWithoutTagsInput>
+}
+
+export type usersUpdateWithoutTagsInput = {
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
+  transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  roles?: Prisma.rolesUpdateOneRequiredWithoutUsersNestedInput
+}
+
+export type usersUncheckedUpdateWithoutTagsInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  first_name?: Prisma.StringFieldUpdateOperationsInput | string
+  last_name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  role_id?: Prisma.IntFieldUpdateOperationsInput | number
+  created_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updated_at?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
+  categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
+  transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersCreateManyRolesInput = {
@@ -823,6 +928,7 @@ export type usersUpdateWithoutRolesInput = {
   accounts?: Prisma.accountsUpdateManyWithoutUsersNestedInput
   categories?: Prisma.categoriesUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateWithoutRolesInput = {
@@ -836,6 +942,7 @@ export type usersUncheckedUpdateWithoutRolesInput = {
   accounts?: Prisma.accountsUncheckedUpdateManyWithoutUsersNestedInput
   categories?: Prisma.categoriesUncheckedUpdateManyWithoutUsersNestedInput
   transactions?: Prisma.transactionsUncheckedUpdateManyWithoutUsersNestedInput
+  tags?: Prisma.tagsUncheckedUpdateManyWithoutUsersNestedInput
 }
 
 export type usersUncheckedUpdateManyWithoutRolesInput = {
@@ -857,12 +964,14 @@ export type UsersCountOutputType = {
   accounts: number
   categories: number
   transactions: number
+  tags: number
 }
 
 export type UsersCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   accounts?: boolean | UsersCountOutputTypeCountAccountsArgs
   categories?: boolean | UsersCountOutputTypeCountCategoriesArgs
   transactions?: boolean | UsersCountOutputTypeCountTransactionsArgs
+  tags?: boolean | UsersCountOutputTypeCountTagsArgs
 }
 
 /**
@@ -896,6 +1005,13 @@ export type UsersCountOutputTypeCountTransactionsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.transactionsWhereInput
 }
 
+/**
+ * UsersCountOutputType without action
+ */
+export type UsersCountOutputTypeCountTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.tagsWhereInput
+}
+
 
 export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -909,6 +1025,7 @@ export type usersSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.users$accountsArgs<ExtArgs>
   categories?: boolean | Prisma.users$categoriesArgs<ExtArgs>
   transactions?: boolean | Prisma.users$transactionsArgs<ExtArgs>
+  tags?: boolean | Prisma.users$tagsArgs<ExtArgs>
   roles?: boolean | Prisma.rolesDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["users"]>
@@ -953,6 +1070,7 @@ export type usersInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   accounts?: boolean | Prisma.users$accountsArgs<ExtArgs>
   categories?: boolean | Prisma.users$categoriesArgs<ExtArgs>
   transactions?: boolean | Prisma.users$transactionsArgs<ExtArgs>
+  tags?: boolean | Prisma.users$tagsArgs<ExtArgs>
   roles?: boolean | Prisma.rolesDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.UsersCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -969,6 +1087,7 @@ export type $usersPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     accounts: Prisma.$accountsPayload<ExtArgs>[]
     categories: Prisma.$categoriesPayload<ExtArgs>[]
     transactions: Prisma.$transactionsPayload<ExtArgs>[]
+    tags: Prisma.$tagsPayload<ExtArgs>[]
     roles: Prisma.$rolesPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1377,6 +1496,7 @@ export interface Prisma__usersClient<T, Null = never, ExtArgs extends runtime.Ty
   accounts<T extends Prisma.users$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$accountsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   categories<T extends Prisma.users$categoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$categoriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   transactions<T extends Prisma.users$transactionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$transactionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tags<T extends Prisma.users$tagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.users$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$tagsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   roles<T extends Prisma.rolesDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.rolesDefaultArgs<ExtArgs>>): Prisma.Prisma__rolesClient<runtime.Types.Result.GetResult<Prisma.$rolesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1885,6 +2005,30 @@ export type users$transactionsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.TransactionsScalarFieldEnum | Prisma.TransactionsScalarFieldEnum[]
+}
+
+/**
+ * users.tags
+ */
+export type users$tagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the tags
+   */
+  select?: Prisma.tagsSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the tags
+   */
+  omit?: Prisma.tagsOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.tagsInclude<ExtArgs> | null
+  where?: Prisma.tagsWhereInput
+  orderBy?: Prisma.tagsOrderByWithRelationInput | Prisma.tagsOrderByWithRelationInput[]
+  cursor?: Prisma.tagsWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TagsScalarFieldEnum | Prisma.TagsScalarFieldEnum[]
 }
 
 /**
